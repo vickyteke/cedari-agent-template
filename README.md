@@ -2,7 +2,7 @@
 
 Build a premium shopping companion for iOS, Android and web. Bring your own Vercel backend, Supabase project, AI credentials and Cedari MCP access. Configure one merchant, several merchants, selected categories or the whole connected catalog.
 
-This is a local template under release verification. Hosted Supabase verification requires Docker or a dedicated test project. Public redistribution of bundled Arviva artwork awaits owner confirmation. See ASSETS.md and docs/release-checklist.md before publishing a fork of this snapshot.
+An MIT-licensed starter with approved Arviva visual assets. Use GitHub’s “Use this template” button to create your own repository. Review ASSETS.md for artwork and branding guidance, and docs/release-checklist.md before launching a customer-facing deployment. Hosted integrations and signed-device behavior require verification with your own projects.
 
 ## Start locally
 
@@ -35,7 +35,7 @@ Read docs/configuration.md for flags and examples, docs/extensions.md for photo/
 
 ## Verify
 
-Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build:backend`, `npm run export:web` and `npm run check:publication`. Database isolation tests are a separate `supabase test db` check. `npm run doctor` checks supplied environment prerequisites without displaying credentials. Load the backend environment into the process before running doctor, for example `node --env-file=apps/backend/.env.local --experimental-strip-types scripts/doctor.mjs`.
+Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build:backend`, `npm run export:web` and `ASSET_RIGHTS_CONFIRMED=true npm run check:publication` after reviewing your assets. Database isolation tests are a separate `supabase test db` check. `npm run doctor` checks supplied environment prerequisites without displaying credentials. Load the backend environment into the process before running doctor, for example `node --env-file=apps/backend/.env.local --experimental-strip-types scripts/doctor.mjs`.
 
 ## Repository structure
 

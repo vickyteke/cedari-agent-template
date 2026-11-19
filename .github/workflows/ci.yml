@@ -29,5 +29,6 @@ jobs:
       - run: supabase start
       - run: supabase db reset
       - run: supabase test db
+      - run: node scripts/test-db-concurrency.mjs
       - if: always()
         run: supabase stop

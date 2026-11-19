@@ -1,0 +1,13 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select plan(8);
+select ok(public.security_budget('template-test:budget',2,3600),'first request admitted');
+select ok(public.security_budget('template-test:budget',2,3600),'second request admitted');
+select ok(not public.security_budget('template-test:budget',2,3600),'request above ceiling rejected');
+select is((select requests from public.security_budgets where key='template-test:budget'),2,'rejection does not grow counter');
+select ok(not public.reserve_model_tokens('guest',101,100),'reservation above caller ceiling rejected');
+select ok(public.reserve_model_tokens('guest',60,100),'reservation within ceiling admitted');
+select ok(not public.reserve_model_tokens('guest',60,100),'cumulative token ceiling enforced');
+select ok(public.acquire_security_lease('invalid','template-test') is null,'unknown lease pool rejected');
+select * from finish();
+rollback;

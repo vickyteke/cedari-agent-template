@@ -1,6 +1,6 @@
 # Implementation status
 
-The configurable template is implemented in the separate local repository on branch template/configurable-agent. It remains under release verification until the external checks and publication decisions below are resolved.
+The configurable template is implemented in a separate repository for publication at https://github.com/vickyteke/cedari-agent-template, with main as its default branch. The owner approved publication and inclusion of current Arviva visual assets on November 18, 2026. Hosted integrations remain operator verification responsibilities.
 
 ## Delivered
 
@@ -17,16 +17,16 @@ The configurable template is implemented in the separate local repository on bra
 
 A clean npm ci succeeded. The verified suites contain 137 backend tests, 56 mobile tests, 16 shared configuration tests and 3 native build-helper tests, for 212 passing tests. TypeScript, lint, the Next production build and the source publication scan passed. iOS, Android and web JavaScript exports succeeded. These exports are bundles rather than signed distribution binaries.
 
+All four standalone migrations applied to a fresh local Supabase database. All 23 SQL assertions passed, covering customer RLS and optimistic state, service-only grants, private image bucket restrictions and budget ceilings. Parallel checks passed with 24 requests competing for five budget slots, 12 initial saves producing one winner and 16 lease requests producing four admissions. These checks are included in CI.
+
 Three web preset exports succeeded. The single-store onboarding was checked in the browser with a custom style option, preferred name and free-form preferences. The minimal preset was checked for Discover-first entry, disabled cold-link redirects, absent upload controls and absent marketing consent when email is disabled. Checkout and paid provider calls use test fixtures for these checks.
 
 An independent reviewer found gaps in the first extraction. The correction pass added regressions for disabled optional tools, identity isolation, account cleanup keys, profile hydration, routing, checkout intent identity, custom photo ownership/clarification, category-based preview eligibility, native project resolution, auth branding, scoped saved refresh and inaccessible required fields. The relevant regressions were observed failing against their earlier behavior before passing with fixes.
 
 ## External gates
 
-- Docker Desktop reports it cannot start. The SQL migration/RLS/storage/concurrency checks are written but have not run locally.
 - No new hosted Supabase/Vercel projects or credentials have been provided for an isolated end-to-end deployment.
 - Real customer email delivery, live Cedari merchant checkout and signed-device behavior require operator-authorized integration testing.
-- GitHub owner/repository name and asset redistribution permission are pending. ASSETS.md and the release checklist describe the publication gate.
 - npm audit reports three moderate findings in the Expo/fingerprint/minimatch build-tool dependency chain, with no high or critical findings. Next and Vitest were updated to address the inherited higher-priority advisories. No forced Expo downgrade or cross-major dependency override was applied.
 
 ## Implementation decisions and tradeoffs
@@ -40,7 +40,7 @@ An independent reviewer found gaps in the first extraction. The correction pass 
 - UI copy and fine-grained style overrides use generated stable keys and an inventory. This covers existing screens broadly, at the cost of less descriptive keys.
 - Protocol headers, selected-workflow instructions and upstream allowlist limits were treated as functional issues and corrected, rather than deferred as translation polish.
 - Chat has a dedicated /chat route, while / resolves the configured initial tab. This is a template-only route change and leaves navigation mounted during redirects.
-- External database, hosted, live-commerce/email and device tests are release gates rather than inferred successes from mocked tests or bundle exports.
-- Public ownership and asset permissions are reserved for the owner. The local folder name does not authorize publication.
+- Hosted database, live-commerce/email and device tests are operator release gates rather than inferred successes from local SQL tests, mocked application tests or bundle exports.
+- The owner explicitly selected vickyteke/cedari-agent-template and authorized redistribution of the included Arviva artwork. Source application histories and private runtime assets remain excluded.
 
 See README.md for setup and docs/release-checklist.md for the remaining checks.
