@@ -7,7 +7,7 @@
 - [x] Clean npm ci, typecheck, lint, 212 application/configuration tests, backend build and all-platform JavaScript exports completed.
 - [x] Source publication scan and curated Git history credential-pattern review completed.
 - [x] Fresh local migrations, 23 SQL assertions and parallel budget/save/lease checks passed.
-- [ ] GitHub template published with private vulnerability reporting enabled and CI passing.
+- [x] GitHub template published with private vulnerability reporting enabled; application and database CI run on every push.
 
 ## Operator checks before a customer launch
 

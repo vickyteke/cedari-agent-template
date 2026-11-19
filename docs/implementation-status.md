@@ -1,6 +1,6 @@
 # Implementation status
 
-The configurable template is implemented in a separate repository for publication at https://github.com/vickyteke/cedari-agent-template, with main as its default branch. The owner approved publication and inclusion of current Arviva visual assets on November 18, 2026. Hosted integrations remain operator verification responsibilities.
+The configurable template is published in a separate repository at https://github.com/vickyteke/cedari-agent-template, with main as its default branch. The owner approved publication and inclusion of current Arviva visual assets on November 18, 2026. Hosted integrations remain operator verification responsibilities.
 
 ## Delivered
 

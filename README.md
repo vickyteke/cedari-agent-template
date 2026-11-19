@@ -1,5 +1,7 @@
 # Cedari Shopping Agent Template
 
+[![Template checks](https://github.com/vickyteke/cedari-agent-template/actions/workflows/ci.yml/badge.svg)](https://github.com/vickyteke/cedari-agent-template/actions/workflows/ci.yml)
+
 Build a premium shopping companion for iOS, Android and web. Bring your own Vercel backend, Supabase project, AI credentials and Cedari MCP access. Configure one merchant, several merchants, selected categories or the whole connected catalog.
 
 An MIT-licensed starter with approved Arviva visual assets. Use GitHub’s “Use this template” button to create your own repository. Review ASSETS.md for artwork and branding guidance, and docs/release-checklist.md before launching a customer-facing deployment. Hosted integrations and signed-device behavior require verification with your own projects.
