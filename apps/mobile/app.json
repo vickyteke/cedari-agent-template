@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Arviva Space",
+    "slug": "arviva-space",
+    "scheme": "arviva",
+    "version": "0.1.2",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#f7f2eb",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ai.cedari.arvivaspace",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "icon": "./assets/icon.png",
+      "buildNumber": "6"
+    },
+    "android": {
+      "package": "ai.cedari.arvivaspace",
+      "icon": "./assets/android-icon.png",
+      "versionCode": 4,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon.png",
+        "backgroundColor": "#003f35"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-localization",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Choose photos of your room or furniture so Arviva can suggest complementary pieces.",
+          "cameraPermission": "Take a photo of your room or furniture to find pieces that work beautifully with it.",
+          "microphonePermission": false
+        }
+      ],
+      "./plugins/withAndroidLauncherIcon"
+    ],
+    "extra": {
+      "company": "Cedari AI",
+      "website": "https://arviva.space"
+    }
+  }
+}

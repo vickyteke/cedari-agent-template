@@ -1,0 +1,19 @@
+import { useEffect, useState } from 'react';
+import { Switch, Text, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { request } from '../lib/api';
+import { useShopper } from '../lib/store';
+import { Button, colors, s } from './ui';
+type Preferences={welcome:boolean;weekly:boolean;suppressed:boolean;available:boolean;consentVersion:string};
+export function EmailPreferences() {
+ const {emailSetup}=useLocalSearchParams<{emailSetup?:string}>();
+ const {session}=useShopper();const [preferences,setPreferences]=useState<Preferences|null>(null);const [busy,setBusy]=useState(false);const [error,setError]=useState('');const [message,setMessage]=useState('');
+ useEffect(()=>{if(!session)return;let alive=true;void request<Preferences>('/email-preferences').then(value=>{if(alive)setPreferences(value);}).catch(()=>{if(alive)setError('Email preferences could not be loaded. Please try again later.');});return()=>{alive=false;};},[session]);
+ if(!session)return <View style={s.panel}><Text style={s.sectionTitle}>Your inbox, thoughtfully curated</Text><Text style={[s.body,{marginTop:12}]}>After you sign in, you can choose a welcome guide and weekly personal edits. Shopping as a guest never subscribes you to emails.</Text></View>;
+ async function save(){if(!preferences)return;setBusy(true);setError('');setMessage('');try{await request('/email-preferences',{method:'POST',body:JSON.stringify({welcome:preferences.welcome,weekly:preferences.weekly,consentVersion:preferences.consentVersion,source:'profile'})});setMessage('Email preferences saved.');}catch(e){setError(e instanceof Error?e.message:'Preferences could not be saved.');}finally{setBusy(false);}}
+ return <View style={s.panel}><Text style={s.sectionTitle}>Your inbox, thoughtfully curated</Text><Text style={[s.body,{marginVertical:12}]}>Choose what you hear from Arviva. These choices are separate from analytics. Welcome and weekly emails are limited to one per week; edits you request are sent separately.</Text>
+ {emailSetup==='retry'&&<Text style={s.error}>Your sign-in succeeded, but your email choices could not be saved. Please choose them below.</Text>}
+ {preferences&&<><View style={[s.row,{justifyContent:'space-between',marginVertical:8}]}><Text style={[s.body,{flex:1,color:colors.ink}]}>A welcome guide, once</Text><Switch accessibilityLabel="Email me a welcome guide once" disabled={busy||preferences.suppressed} value={preferences.welcome} onValueChange={welcome=>setPreferences({...preferences,welcome})}/></View><View style={[s.row,{justifyContent:'space-between',marginVertical:8}]}><Text style={[s.body,{flex:1,color:colors.ink}]}>Weekly personal edits</Text><Switch accessibilityLabel="Email me weekly personal edits" disabled={busy||preferences.suppressed} value={preferences.weekly} onValueChange={weekly=>setPreferences({...preferences,weekly})}/></View><Text style={s.small}>Up to five pieces inspired by your preferences and shopping activity. We’ll skip an edit when there aren’t enough fresh matches. Email links let you return to Arviva; chat text and room photos are never included.</Text>{!preferences.available&&<Text style={[s.small,{marginTop:12}]}>Email delivery is being connected. You can save your choices now.</Text>}{preferences.suppressed&&<Text style={s.error}>Email delivery to this account is paused after a delivery problem or opt-out reported to our email provider. Contact hello@arviva.space for help.</Text>}<Button secondary disabled={busy||preferences.suppressed} onPress={()=>void save()} style={{marginTop:16}}>{busy?'Saving…':'Save email preferences'}</Button></>}
+ {!!error&&<Text accessibilityLiveRegion="polite" style={s.error}>{error}</Text>}{!!message&&<Text accessibilityLiveRegion="polite" style={[s.small,{marginTop:12}]}>{message}</Text>}
+ </View>;
+}

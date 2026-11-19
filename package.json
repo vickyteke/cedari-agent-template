@@ -1,0 +1,17 @@
+{
+  "name": "cedari-agent-template",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build:backend": "npm run build --workspace apps/backend",
+    "export:web": "npm run export:web --workspace apps/mobile",
+    "check:config": "node --experimental-strip-types scripts/check-config.mjs"
+  }
+}
