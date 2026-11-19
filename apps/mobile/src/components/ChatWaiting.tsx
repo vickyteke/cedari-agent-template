@@ -1,3 +1,5 @@
+import { styleToken } from "../../../../packages/config/src/theme.ts";
+import { t } from "../../../../packages/config/src/copy.ts";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo, Animated, AppState, Platform, Text, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
@@ -42,12 +44,12 @@ export function ChatWaiting({ turn, startedAt, status, streaming, replyStarted, 
     track('chat_wait_long', { conversation_id: conversationId || '', wait_ms: elapsed, presentation: 'home_rhyme' });
   }, [rhyme, foreground, focused, elapsed, conversationId]);
   return <View style={{ marginBottom: streaming ? 10 : 20 }}>
-    <View style={[s.row, { marginBottom: 10 }]}>
+    <View style={[s.row, { marginBottom: styleToken("ChatWaiting.marginBottom.4a44dc1536","marginBottom",10) }]}>
       <Animated.View style={reduceMotion ? undefined : { opacity: pulse.interpolate({ inputRange: [0, 1], outputRange: [0.65, 1] }), transform: [{ scale: pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.055] }) }] }}><Logo size={30}/></Animated.View>
-      <Text style={s.eyebrow}>Arviva</Text>
+      <Text style={s.eyebrow}>{t("ui.633b564713")}</Text>
     </View>
     {!streaming && <Text accessibilityLiveRegion="polite" style={s.body}>{status}</Text>}
-    {!streaming && rhyme && <View style={{ marginTop: 14, padding: 16, borderRadius: 16, backgroundColor: colors.soft }}><Text style={[s.small, { color: colors.accent, marginBottom: 6 }]}>A considered detail</Text><Text style={{ color: colors.ink, fontSize: 14, lineHeight: 23, fontStyle: 'italic' }}>{rhyme}</Text></View>}
-    {!streaming && !replyStarted && elapsed >= 25000 && <Text style={[s.small, { marginTop: 10 }]}>This is taking a little longer. I’m still here.</Text>}
+    {!streaming && rhyme && <View style={{ marginTop: styleToken("ChatWaiting.marginTop.8527a891e2","marginTop",14), padding: styleToken("ChatWaiting.padding.b17ef6d19c","padding",16), borderRadius: styleToken("ChatWaiting.borderRadius.b17ef6d19c","borderRadius",16), backgroundColor: colors.soft }}><Text style={[s.small, { color: colors.accent, marginBottom: styleToken("ChatWaiting.marginBottom.e7f6c01177","marginBottom",6) }]}>{t("ui.1c60dc85fc")}</Text><Text style={{ color: colors.ink, fontSize: styleToken("ChatWaiting.fontSize.8527a891e2","fontSize",14), lineHeight: styleToken("ChatWaiting.lineHeight.535fa30d7e","lineHeight",23), fontStyle: 'italic' }}>{rhyme}</Text></View>}
+    {!streaming && !replyStarted && elapsed >= 25000 && <Text style={[s.small, { marginTop: styleToken("ChatWaiting.marginTop.4a44dc1536","marginTop",10) }]}>{t("ui.f126a15083")}</Text>}
   </View>;
 }

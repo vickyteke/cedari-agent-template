@@ -1,3 +1,4 @@
+import {agentConfig} from "../../../packages/config/src/public";
 import { beforeEach,describe,expect,it,vi } from 'vitest';
 import { createHmac } from 'node:crypto';
 import { editUrl,html,messageContent,safeUrl,tokenFor,validToken,validWebhookSignature } from '../src/lib/email/content';
@@ -14,7 +15,8 @@ const user='11111111-1111-4111-8111-111111111111',job='22222222-2222-4222-8222-2
 const product=(id='33333333-3333-4333-8333-333333333333'):Product=>({id,store_key:'merchant',shopify_product_id:id,shopify_variant_id:'1',handle:'curtain',title:'Beige curtain',description:null,vendor:'A shop',product_type:'Curtains',tags:[],price:125,compare_at_price:null,currency:'USD',available:true,inventory_quantity:3,image_url:'https://cdn.example.com/beige.jpg',product_url:'https://shop.example.com/beige',variant_title:'Beige',updated_at:''});
 let status:string,claimCount:number,updates:Record<string,unknown>[],pref:{welcome_enabled:boolean;weekly_enabled:boolean;suppressed:boolean};
 beforeEach(()=>{
- vi.clearAllMocks();vi.unstubAllEnvs();vi.stubEnv('EMAIL_ENABLED','true');vi.stubEnv('EMAIL_TOKEN_SECRET','t'.repeat(48));vi.stubEnv('EMAIL_POSTAL_ADDRESS','123 Example Avenue');vi.stubEnv('MAILGUN_API_KEY','test-api-key');vi.stubEnv('MAILGUN_DOMAIN','mg.example.com');vi.stubEnv('MAILGUN_FROM','Arviva Space <hello@arviva.space>');vi.stubEnv('MAILGUN_WEBHOOK_SIGNING_KEY','test-signing-key');
+ agentConfig.features.email=true;
+ vi.clearAllMocks();vi.unstubAllEnvs();vi.stubEnv('EMAIL_ENABLED','true');vi.stubEnv('EMAIL_TOKEN_SECRET','t'.repeat(48));vi.stubEnv('EMAIL_POSTAL_ADDRESS','123 Example Avenue');vi.stubEnv('MAILGUN_API_KEY','test-api-key');vi.stubEnv('MAILGUN_DOMAIN','mg.example.com');vi.stubEnv('MAILGUN_FROM','Agent <hello@agent.example>');vi.stubEnv('MAILGUN_WEBHOOK_SIGNING_KEY','test-signing-key');
  status='pending';claimCount=0;updates=[];pref={welcome_enabled:true,weekly_enabled:true,suppressed:false};
  mocks.user.mockResolvedValue({id:user,email_confirmed_at:'2026-01-01'});mocks.rate.mockResolvedValue(true);mocks.tool.mockResolvedValue([product()]);
  mocks.admin.mockImplementation(()=>({auth:{admin:{getUserById:vi.fn().mockResolvedValue({data:{user:{id:user,email:'owner@example.com',email_confirmed_at:'2026-01-01',is_anonymous:false}},error:null})}},rpc:vi.fn(async name=>{if(name==='claim_customer_email'){claimCount++;if(status!=='pending')return {data:[],error:null};status='processing';return {data:[{id:job,user_id:user,kind:'edit',payload:{productIds:[product().id]},status}],error:null};}return {data:null,error:null};}),from:(table:string)=>{
@@ -26,7 +28,7 @@ beforeEach(()=>{
 });
 describe('email privacy and links',()=>{
  it('escapes content and rejects unsafe schemes or local URLs',()=>{expect(html('<script>"')).toBe('&lt;script&gt;&quot;');for(const url of ['javascript:alert(1)','http://shop.example.com','https://localhost/a','https://127.0.0.1','https://user:pass@shop.example.com'])expect(safeUrl(url)).toBeNull();});
- it('signs links for a single purpose and identifier',()=>{const token=tokenFor('edit',job);expect(validToken('edit',job,token)).toBe(true);expect(validToken('unsubscribe',job,token)).toBe(false);expect(validToken('edit',user,token)).toBe(false);expect(validToken('edit',job,token.slice(1))).toBe(false);expect(editUrl(job)).toContain('https://www.arviva.space/email/open?');});
+ it('signs links for a single purpose and identifier',()=>{const token=tokenFor('edit',job);expect(validToken('edit',job,token)).toBe(true);expect(validToken('unsubscribe',job,token)).toBe(false);expect(validToken('edit',user,token)).toBe(false);expect(validToken('edit',job,token.slice(1))).toBe(false);expect(editUrl(job)).toContain('https://agent.example/email/open?');});
  it('caps product cards, keeps the exact variant, and escapes merchant text',()=>{const p={...product(),title:'<img src=x onerror=alert(1)>',merchant_name:'<script>shop</script>'};const content=messageContent('edit','<Alex>',Array(8).fill(p),job,user);expect(content.html.match(/<article/g)).toHaveLength(5);expect(content.html).toContain('Beige');expect(content.html).toContain('beige.jpg');expect(content.html).not.toContain('<script>shop');expect(content.html).toContain('&lt;Alex&gt;');});
  it('does not send a generic weekly edit with no preferences or activity',()=>{expect(weeklyQuery({profile:{name:'Alex',preferences:''}})).toBeNull();expect(weeklyQuery({profile:{preferences:'Natural wood'},saved:{x:{active:true,updatedAt:2,product:{id:'x',title:'Lamp',product_type:'Lighting'}}}})).toBe('Lighting');});
 });

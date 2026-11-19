@@ -1,4 +1,6 @@
-import { HOME_CATEGORIES, isHomeCategory } from "./home-catalog";
+import {t} from "../../../../../packages/config/src/copy";
+import { allowsProduct, configuredAssortment, intersectSearch, type ResolvedAssortment } from "../policy/assortment";
+import { agentConfig } from "../../../../../packages/config/src/public";
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { boundedMap } from "../bounded-map";
@@ -6,7 +8,6 @@ import type { Product } from "../types";
 import { cartSchema, CommerceError } from "./commerce";
 import { cedariIdentity, cedariProductId, productIdSchema } from "./identity";
 import { publicProduct } from "./products";
-import { getStore } from "../stores";
 import { upstreamData } from "./contract";
 
 export type CommerceContext = { buyerIp?: string; principalId?: string; idempotencyKey?: string };
@@ -28,7 +29,7 @@ const searchSchema = z.object({
   minPrice: z.number().nonnegative().optional(), maxPrice: z.number().nonnegative().optional(), currency: z.string().regex(/^[A-Z]{3}$/).optional(),
   availableOnly: z.boolean().default(true), limit: z.number().int().min(1).max(30).default(24),
   excludeProductIds: z.array(productIdSchema).max(500).default([]), distinctProducts: z.boolean().default(false),
-}).strict().refine(input => input.minPrice == null || input.maxPrice == null || input.minPrice <= input.maxPrice, "Invalid price range");
+}).strict().refine(input => input.minPrice == null || input.maxPrice == null || input.minPrice <= input.maxPrice, t("backend.fe55f9e7e3"));
 const idsSchema = z.object({ productIds: z.array(productIdSchema).min(1).max(8) }).strict();
 
 export function secureCommerceUrl(value?: string | null) {
@@ -57,7 +58,7 @@ function budgetMinor(value: number, currency: string, roundUp: boolean) {
   const divisor = shift < 0 ? 10n ** BigInt(-shift) : 1n;
   const scaled = shift >= 0 ? numerator * 10n ** BigInt(shift) : numerator;
   const result = scaled / divisor + (roundUp && scaled % divisor !== 0n ? 1n : 0n);
-  if (result > BigInt(Number.MAX_SAFE_INTEGER)) throw new CommerceError("The requested budget is too large.", 400);
+  if (result > BigInt(Number.MAX_SAFE_INTEGER)) throw new CommerceError(t("backend.57008dc548"), 400);
   return Number(result);
 }
 function productsFromListing(data: z.infer<typeof listing>): Product[] {
@@ -74,18 +75,18 @@ function productsFromListing(data: z.infer<typeof listing>): Product[] {
 }
 function identity(id: string) {
   const value = cedariIdentity(id);
-  if (!value) throw new CommerceError("This saved piece belongs to the previous catalog. Find it again before checking out.", 409);
+  if (!value) throw new CommerceError(t("backend.3c86a059dc"), 409);
   return value;
 }
-async function getSelected(ids: string[], invoke: Invoke, signal?: AbortSignal) {
+async function getSelected(ids: string[], invoke: Invoke, policy: ResolvedAssortment, signal?: AbortSignal) {
   const identities = ids.flatMap(id => cedariIdentity(id) || []);
   const groups = await boundedMap([...new Set(identities.map(id => id.listing_id))], async listing_id => {
     let raw: unknown;
     try { raw = await invoke("get_products", { listing_id }, signal); }
     catch (error) { if (error instanceof CommerceError && error.code === "not_found") return []; throw error; }
     const data = upstreamData(z.object({ listing }), raw);
-    if (data.listing.id !== listing_id) throw new Error("Mismatched Cedari listing");
-    const products = isHomeCategory(data.listing.category) ? productsFromListing(data.listing) : [];
+    if (data.listing.id !== listing_id) throw new Error(t("backend.c19d8a8950"));
+    const products = allowsProduct(policy, { category: data.listing.category, merchantId: data.listing.merchant.id }) ? productsFromListing(data.listing) : [];
     return products;
   });
   const all = new Map(groups.flat().map(product => [product.id, product]));
@@ -106,19 +107,16 @@ function diverseProducts(groups: Product[][], limit: number, distinct: boolean) 
   return products;
 }
 function wire(products: Product[]) {
-  return products.map(product => publicProduct(product, process.env.NEXT_PUBLIC_APP_URL || "https://www.arviva.space"));
+  return products.map(product => publicProduct(product, process.env.APP_URL || "https://example.invalid"));
 }
 
-export async function callCedariAdapter(name: string, args: Record<string, unknown>, invoke: Invoke, signal?: AbortSignal, context: CommerceContext = {}) {
+export async function callCedariAdapter(name: string, args: Record<string, unknown>, invoke: Invoke, signal?: AbortSignal, context: CommerceContext = {}, policy: ResolvedAssortment = configuredAssortment()) {
   if (name === "search_products") {
     const input = searchSchema.parse(args);
-    if (input.category && !isHomeCategory(input.category)) return { products: [], count: 0 };
-    const currency = input.currency || (input.minPrice !== undefined || input.maxPrice !== undefined ? "USD" : undefined);
+    const currency = input.currency || (input.minPrice !== undefined || input.maxPrice !== undefined ? agentConfig.discovery.currency : undefined);
     const filters = {
-      categories: [...HOME_CATEGORIES],
+      ...intersectSearch(policy, input),
       ...(currency ? { currency } : {}), in_stock: input.availableOnly, limit: input.limit,
-      ...(input.category ? { category: input.category } : {}),
-      ...(input.store ? { merchant_ids: [getStore(input.store) ? `mrc_arviva_${input.store}` : input.store] } : {}),
       ...(input.minPrice !== undefined ? { min_price_minor: budgetMinor(input.minPrice, currency!, true) } : {}),
       ...(input.maxPrice !== undefined ? { max_price_minor: budgetMinor(input.maxPrice, currency!, false) } : {}),
       exclude_listing_ids: [...new Set(input.excludeProductIds.flatMap(id => cedariIdentity(id)?.listing_id || []))],
@@ -128,10 +126,10 @@ export async function callCedariAdapter(name: string, args: Record<string, unkno
     if ("min_price_minor" in filters && "max_price_minor" in filters && filters.min_price_minor! > filters.max_price_minor!) return { products: [], count: 0 };
     const alternatives = [...new Set(input.query?.split(/\s+OR\s+/i).map(query => query.trim()).filter(Boolean) || [])];
     const queries = alternatives.length ? alternatives : [undefined];
-    if (queries.length > 4) throw new CommerceError("Please use at most four search alternatives.", 400);
+    if (queries.length > 4) throw new CommerceError(t("backend.b8957f42da"), 400);
     const groups = await boundedMap(queries, async query => {
       const data = upstreamData(z.object({ listings: z.array(listing) }), await invoke("search_products", { ...filters, ...(query ? { query } : {}) }, signal));
-      const products = data.listings.filter(item => isHomeCategory(item.category)).flatMap(item => {
+      const products = data.listings.filter(item => allowsProduct(policy, { category: item.category, merchantId: item.merchant.id })).flatMap(item => {
         const products = productsFromListing(item);
         return input.distinctProducts ? products.slice(0, 1) : products;
       });
@@ -144,24 +142,24 @@ export async function callCedariAdapter(name: string, args: Record<string, unkno
   }
   if (name === "get_products" || name === "compare_products") {
     const input = idsSchema.parse(args);
-    if (name === "compare_products" && input.productIds.length < 2) throw new CommerceError("Choose at least two pieces to compare.", 400);
-    const products = await getSelected(input.productIds, invoke, signal);
+    if (name === "compare_products" && input.productIds.length < 2) throw new CommerceError(t("backend.3ae0651159"), 400);
+    const products = await getSelected(input.productIds, invoke, policy, signal);
     return { products: wire(products), missingProductIds: input.productIds.filter(id => !products.some(product => product.id === id)) };
   }
   if (name === "create_cart_link") {
     const { items } = cartSchema.parse(args);
-    if (items.length > 25) throw new CommerceError("Check out with at most 25 pieces at a time.", 400);
-    if (new Set(items.map(item => item.productId)).size !== items.length) throw new CommerceError("Duplicate items.", 400);
+    if (items.length > 25) throw new CommerceError(t("backend.8b59cac306"), 400);
+    if (new Set(items.map(item => item.productId)).size !== items.length) throw new CommerceError(t("backend.aee916eed9"), 400);
     items.forEach(item => identity(item.productId));
-    if (!context.idempotencyKey || !context.principalId) throw new CommerceError("A checkout attempt key is required. Please update the app and try again.", 400);
-    const products = await getSelected(items.map(item => item.productId), invoke, signal);
-    if (products.length !== items.length) throw new CommerceError("Some selected pieces are no longer available.", 409);
-    if (new Set(products.map(product => product.store_key)).size !== 1) throw new CommerceError("Check out with one shop at a time.", 400);
-    if (new Set(products.map(product => product.currency)).size !== 1) throw new CommerceError("Check out in one currency at a time.", 400);
+    if (!context.idempotencyKey || !context.principalId) throw new CommerceError(t("backend.81126e67b6"), 400);
+    const products = await getSelected(items.map(item => item.productId), invoke, policy, signal);
+    if (products.length !== items.length) throw new CommerceError(t("backend.7439e7c630"), 409);
+    if (new Set(products.map(product => product.store_key)).size !== 1) throw new CommerceError(t("backend.121eaff940"), 400);
+    if (new Set(products.map(product => product.currency)).size !== 1) throw new CommerceError(t("backend.9bee96e0d5"), 400);
     // Cedari resolves the stable idempotency key before checking inventory for
     // new sessions. Local stock gating would prevent recovering an existing
     // successful checkout after it reduced inventory and its response was lost.
-    const idempotency_key = `arviva_${createHash("sha256").update(JSON.stringify([context.principalId, context.idempotencyKey, products[0].store_key])).digest("hex")}`;
+    const idempotency_key = `${agentConfig.id}_${createHash("sha256").update(JSON.stringify([context.principalId, context.idempotencyKey, products[0].store_key])).digest("hex")}`;
     const selected = items.map(item => ({ ...identity(item.productId), quantity: item.quantity })).sort((a, b) => `${a.listing_id}:${a.variant_id}`.localeCompare(`${b.listing_id}:${b.variant_id}`));
     const mode = z.enum(["demo", "hosted_checkout"]);
     const result = upstreamData(z.object({
@@ -181,11 +179,11 @@ export async function callCedariAdapter(name: string, args: Record<string, unkno
     if (!url || secureCommerceUrl(checkout.checkout_url) !== url || checkout.merchant_id !== products[0].store_key
       || checkout.currency !== products[0].currency || checkout.idempotency_key !== idempotency_key
       || checkout.purchase_mode !== result.next_action.purchase_mode || checkout.provider !== result.next_action.provider
-      || returned.size !== checkout.lines.length || returned.size !== expected.size || [...expected].some(([id, quantity]) => returned.get(id) !== quantity)) throw new CommerceError("The merchant checkout could not be verified. Please try again.", 503, "upstream_invalid_response");
-    if (checkout.purchase_mode !== "hosted_checkout") throw new CommerceError("This piece does not support merchant checkout.", 409, "feature_disabled");
+      || returned.size !== checkout.lines.length || returned.size !== expected.size || [...expected].some(([id, quantity]) => returned.get(id) !== quantity)) throw new CommerceError(t("backend.472eb76002"), 503, "upstream_invalid_response");
+    if (checkout.purchase_mode !== "hosted_checkout") throw new CommerceError(t("backend.a70e8d0559"), 409, "feature_disabled");
     return { cartUrl: url, storeKey: products[0].store_key, merchant: products[0].merchant_name || products[0].store_key };
   }
-  throw new CommerceError("That shopping action is unavailable.", 400);
+  throw new CommerceError(t("backend.8ad175ffc7"), 400);
 }
 
 // The app agent keeps its established selection interface. These schemas are
@@ -193,7 +191,7 @@ export async function callCedariAdapter(name: string, args: Record<string, unkno
 const idArray = { type: "array", minItems: 1, maxItems: 8, items: { type: "string", maxLength: 1024 } };
 export const cedariTools = [
   { name: "search_products", inputSchema: { type: "object", additionalProperties: false, properties: {
-    query: { type: "string", maxLength: 180 }, category: { type: "string" }, store: { type: "string" }, currency: { type: "string", description: "ISO currency for explicit budgets. Use the shopper's stated currency; unqualified dollars mean USD." },
+    query: { type: "string", maxLength: 180 }, category: { type: "string" }, store: { type: "string" }, currency: { type: "string", description: t("backend.3ab3889705") },
     minPrice: { type: "number", minimum: 0 }, maxPrice: { type: "number", minimum: 0 }, availableOnly: { type: "boolean" },
     limit: { type: "integer", minimum: 1, maximum: 30 }, distinctProducts: { type: "boolean" }, excludeProductIds: { type: "array", maxItems: 500, items: { type: "string" } },
   } } },

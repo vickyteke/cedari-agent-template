@@ -1,3 +1,4 @@
+import {t} from "../../../../../packages/config/src/copy";
 import { z } from "zod";
 
 export function cedariProductId(listingId: string, variantId: string) {
@@ -13,4 +14,4 @@ export function cedariIdentity(id: string) {
 }
 // Old saved conversations remain readable; legacy UUIDs cannot authorize a
 // Cedari checkout and are rejected by the upstream adapter before any mutation.
-export const productIdSchema = z.string().max(1024).refine(id => z.uuid().safeParse(id).success || !!cedariIdentity(id), "Invalid product ID");
+export const productIdSchema = z.string().max(1024).refine(id => z.uuid().safeParse(id).success || !!cedariIdentity(id), t("backend.1029f5b650"));

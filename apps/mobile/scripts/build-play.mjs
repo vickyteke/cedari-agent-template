@@ -6,10 +6,10 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 process.chdir(root);
 if (existsSync('.env.local')) process.loadEnvFile('.env.local');
-process.env.EXPO_PUBLIC_API_URL = 'https://www.arviva.space';
+process.env.EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL || '';
 process.env.NODE_ENV = 'production';
-process.env.JAVA_HOME ||= '/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home';
-process.env.ANDROID_HOME ||= '/opt/homebrew/share/android-commandlinetools';
+if (!process.env.JAVA_HOME) throw Error('Set JAVA_HOME to your JDK 17 installation');
+if (!process.env.ANDROID_HOME) throw Error('Set ANDROID_HOME to your Android SDK');
 process.env.PATH = `${process.env.JAVA_HOME}/bin:${process.env.PATH}`;
 for (const key of ['EXPO_PUBLIC_SUPABASE_URL', 'EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY']) {
   if (!process.env[key]) throw Error(`${key} must be configured`);
@@ -23,7 +23,7 @@ const signingDir = path.join(root, 'builds/play-signing');
 mkdirSync(signingDir, {recursive: true, mode: 0o700});
 chmodSync(signingDir, 0o700);
 const passwordFile = path.join(signingDir, 'password');
-const storeFile = path.join(signingDir, 'arviva-upload.jks');
+const storeFile = process.env.ARVIVA_UPLOAD_STORE_FILE || path.join(signingDir, 'agent-upload.jks');
 if (!existsSync(passwordFile)) {
   if (existsSync(storeFile)) throw Error('Existing upload key has no password file; restore credentials before building');
   writeFileSync(passwordFile, randomBytes(32).toString('base64url'), {mode: 0o600});

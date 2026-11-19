@@ -12,6 +12,18 @@
     "test": "npm run test --workspaces --if-present",
     "build:backend": "npm run build --workspace apps/backend",
     "export:web": "npm run export:web --workspace apps/mobile",
-    "check:config": "node --experimental-strip-types scripts/check-config.mjs"
+    "check:config": "node --experimental-strip-types scripts/check-config.mjs",
+    "doctor": "node --experimental-strip-types scripts/doctor.mjs",
+    "check:publication": "node --experimental-strip-types scripts/check-publication.mjs",
+    "dev:mobile": "npm run start --workspace apps/mobile",
+    "dev:backend": "npm run dev --workspace apps/backend",
+    "build:ios": "npm run build:ios --workspace apps/mobile",
+    "build:android:play": "npm run build:android:play --workspace apps/mobile"
+  },
+  "devDependencies": {
+    "expo": "~58.0.17",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.0"
   }
 }

@@ -1,3 +1,4 @@
+import {t} from "../../../../../packages/config/src/copy";
 import { mobilePrincipal } from "../mcp/auth";
 import { createHash } from "node:crypto";
 import { getSupabaseAdmin } from "../supabase";
@@ -7,10 +8,10 @@ export class BodyReadError extends Error {
 }
 
 export function json(data: unknown, status = 200) {
-  return Response.json(data, { status, headers: { "Access-Control-Allow-Origin": process.env.MOBILE_WEB_ORIGIN || "http://localhost:8081", "Cache-Control": "no-store" } });
+  return Response.json(data, { status, headers: { "Cache-Control": "no-store" } });
 }
 export function preflight() {
-  return new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": process.env.MOBILE_WEB_ORIGIN || "http://localhost:8081", "Access-Control-Allow-Headers": "Content-Type, Authorization", "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS" } });
+  return new Response(null, { status: 204, headers: { "Access-Control-Allow-Headers": "Content-Type, Authorization", "Access-Control-Allow-Methods": t("backend.f0163dd8ab") } });
 }
 export async function boundedBytes(stream: ReadableStream<Uint8Array>, maximum: number, timeout = 10000) {
   const reader = stream.getReader();
@@ -18,14 +19,14 @@ export async function boundedBytes(stream: ReadableStream<Uint8Array>, maximum: 
   let total = 0;
   let timedOut = false;
   let timer: ReturnType<typeof setTimeout> | undefined;
-  const expired = new Promise<never>((_, reject) => { timer = setTimeout(() => { timedOut = true; reject(new BodyReadError("Read deadline exceeded", 408)); void reader.cancel().catch(() => {}); }, timeout); });
+  const expired = new Promise<never>((_, reject) => { timer = setTimeout(() => { timedOut = true; reject(new BodyReadError(t("backend.3877664815"), 408)); void reader.cancel().catch(() => {}); }, timeout); });
   try {
     while (true) {
       const { done, value } = await Promise.race([reader.read(), expired]);
-      if (timedOut) throw new BodyReadError("Read deadline exceeded", 408);
+      if (timedOut) throw new BodyReadError(t("backend.3877664815"), 408);
       if (done) break;
       total += value.byteLength;
-      if (total > maximum) { void reader.cancel().catch(() => {}); throw new BodyReadError("Request too large", 413); }
+      if (total > maximum) { void reader.cancel().catch(() => {}); throw new BodyReadError(t("backend.66228a295b"), 413); }
       chunks.push(value);
     }
     const result = new Uint8Array(total);
@@ -37,12 +38,12 @@ export async function boundedBytes(stream: ReadableStream<Uint8Array>, maximum: 
 export async function body(request: Request, maximum = 64000) {
   if (Number(request.headers.get("content-length")) > maximum) {
     void request.body?.cancel().catch(() => {});
-    throw new BodyReadError("Request too large", 413);
+    throw new BodyReadError(t("backend.66228a295b"), 413);
   }
-  if (!request.body) throw new BodyReadError("Invalid request body", 400);
+  if (!request.body) throw new BodyReadError(t("backend.53cbd48fe3"), 400);
   const bytes = await boundedBytes(request.body, maximum);
   try { return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)); }
-  catch { throw new BodyReadError("Invalid request body", 400); }
+  catch { throw new BodyReadError(t("backend.53cbd48fe3"), 400); }
 }
 export async function rateLimit(request: Request, scope: string, limit: number, identity?: string) {
   // Use the trusted reverse proxy's client IP. Do not expose this server directly.
@@ -56,7 +57,7 @@ export async function rateLimit(request: Request, scope: string, limit: number, 
     return entry.requests <= limit;
   }
   const { data, error } = await getSupabaseAdmin().rpc("mobile_rate_limit", { bucket_key: bucket, max_requests: limit });
-  if (error) throw new Error("Mobile database setup required");
+  if (error) throw new Error(t("backend.3361016afa"));
   return data === true;
 }
 export async function userFromRequest(request: Request) {

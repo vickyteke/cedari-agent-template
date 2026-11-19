@@ -1,3 +1,4 @@
+import { styleToken } from "../../../../packages/config/src/theme.ts";
 import { memo, useMemo } from 'react';
 import { Linking, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { chatMarkdown, type Block, type Inline } from '../lib/markdown';
@@ -27,11 +28,11 @@ export const ChatMarkdown = memo(function ChatMarkdown({ children }: { children:
   return <View style={{ flexShrink: 1 }}>{render(blocks)}</View>;
 });
 const styles = StyleSheet.create({
-  text: { fontSize: 14, lineHeight: 23, color: colors.ink }, strong: { fontWeight: '700' }, em: { fontStyle: 'italic' }, del: { textDecorationLine: 'line-through' },
-  heading: { fontWeight: '600', marginTop: 10, marginBottom: 8, lineHeight: 29 }, link: { color: colors.accent, textDecorationLine: 'underline' },
+  text: { fontSize: styleToken("ChatMarkdown.fontSize.8527a891e2","fontSize",14), lineHeight: styleToken("ChatMarkdown.lineHeight.535fa30d7e","lineHeight",23), color: colors.ink }, strong: { fontWeight: '700' }, em: { fontStyle: 'italic' }, del: { textDecorationLine: 'line-through' },
+  heading: { fontWeight: '600', marginTop: styleToken("ChatMarkdown.marginTop.4a44dc1536","marginTop",10), marginBottom: styleToken("ChatMarkdown.marginBottom.2c624232cd","marginBottom",8), lineHeight: styleToken("ChatMarkdown.lineHeight.35135aaa6c","lineHeight",29) }, link: { color: colors.accent, textDecorationLine: 'underline' },
   inlineCode: { fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', backgroundColor: colors.soft },
-  code: { fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', backgroundColor: colors.soft, padding: 12, borderRadius: 8, marginBottom: 10 },
-  list: { marginBottom: 8 }, item: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 3 }, bullet: { minWidth: 20 }, itemContent: { flex: 1 },
-  quote: { borderLeftWidth: 3, borderColor: colors.accent, paddingLeft: 12, marginVertical: 8 }, rule: { height: 1, backgroundColor: colors.line, marginVertical: 12 },
-  table: { marginVertical: 8 }, tableRow: { flexDirection: 'row' }, cell: { width: 170, padding: 8, borderWidth: 0.5, borderColor: colors.line },
+  code: { fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', backgroundColor: colors.soft, padding: styleToken("ChatMarkdown.padding.6b51d431df","padding",12), borderRadius: styleToken("ChatMarkdown.borderRadius.2c624232cd","borderRadius",8), marginBottom: styleToken("ChatMarkdown.marginBottom.4a44dc1536","marginBottom",10) },
+  list: { marginBottom: styleToken("ChatMarkdown.marginBottom.2c624232cd","marginBottom",8) }, item: { flexDirection: 'row', alignItems: 'flex-start', gap: styleToken("ChatMarkdown.gap.2c624232cd","gap",8), marginBottom: styleToken("ChatMarkdown.marginBottom.4e07408562","marginBottom",3) }, bullet: { minWidth: styleToken("ChatMarkdown.minWidth.f5ca38f748","minWidth",20) }, itemContent: { flex: 1 },
+  quote: { borderLeftWidth: 3, borderColor: colors.accent, paddingLeft: styleToken("ChatMarkdown.paddingLeft.6b51d431df","paddingLeft",12), marginVertical: styleToken("ChatMarkdown.marginVertical.2c624232cd","marginVertical",8) }, rule: { height: styleToken("ChatMarkdown.height.6b86b273ff","height",1), backgroundColor: colors.line, marginVertical: styleToken("ChatMarkdown.marginVertical.6b51d431df","marginVertical",12) },
+  table: { marginVertical: styleToken("ChatMarkdown.marginVertical.2c624232cd","marginVertical",8) }, tableRow: { flexDirection: 'row' }, cell: { width: styleToken("ChatMarkdown.width.734d0759cd","width",170), padding: styleToken("ChatMarkdown.padding.2c624232cd","padding",8), borderWidth: styleToken("ChatMarkdown.borderWidth.d2cbad71ff","borderWidth",0.5), borderColor: colors.line },
 });

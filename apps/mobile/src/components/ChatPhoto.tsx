@@ -1,3 +1,5 @@
+import { styleToken } from "../../../../packages/config/src/theme.ts";
+import { t } from "../../../../packages/config/src/copy.ts";
 import { useEffect, useState } from 'react';
 import { Image, Modal, Pressable, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -41,19 +43,18 @@ function PrivatePhoto({ photo, preview = false }: Props) {
   const image = uri && !missing ? (
     <Image
       source={{ uri }}
-      accessibilityLabel={preview ? 'AI preview of the selected piece in your space' : 'Photo shared with Arviva'}
+      accessibilityLabel={preview ? t("ui.9fb8145511") : t("ui.6e17ed12a1")}
       style={{ width: '100%', height: '100%' }}
       resizeMode={preview ? 'contain' : 'cover'}
       onError={imageFailed}
     />
   ) : missing ? (
     <Pressable accessibilityRole="button" onPress={reload}>
-      <Text style={[s.small, { textAlign: 'center', padding: 8 }]}>
-        {preview ? 'Room preview unavailable.' : 'Photo unavailable.'} Tap to retry.
-      </Text>
+      <Text style={[s.small, { textAlign: 'center', padding: styleToken("ChatPhoto.padding.2c624232cd","padding",8) }]}>
+        {preview ? t("ui.9c266cb6dc") : t("ui.539fb8721f")} {t("ui.7297cdf4cb")}</Text>
     </Pressable>
   ) : (
-    <Text style={[s.small, { textAlign: 'center', padding: 8 }]}>Loading photo…</Text>
+    <Text style={[s.small, { textAlign: 'center', padding: styleToken("ChatPhoto.padding.2c624232cd","padding",8) }]}>{t("ui.49fba41bc3")}</Text>
   );
 
   return (
@@ -61,16 +62,16 @@ function PrivatePhoto({ photo, preview = false }: Props) {
       width: preview ? '100%' : 128,
       height: preview ? undefined : 128,
       aspectRatio: preview ? 4 / 3 : undefined,
-      borderRadius: 12,
+      borderRadius: styleToken("ChatPhoto.borderRadius.6b51d431df","borderRadius",12),
       overflow: 'hidden',
       backgroundColor: colors.paper,
       justifyContent: 'center',
-      marginBottom: 8,
+      marginBottom: styleToken("ChatPhoto.marginBottom.2c624232cd","marginBottom",8),
     }}>
       {preview && uri && !missing ? (
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open room preview full screen"
+          accessibilityLabel={t("ui.6f46ac9d88")}
           onPress={() => setExpanded(true)}
           style={{ flex: 1 }}
         >
@@ -80,14 +81,14 @@ function PrivatePhoto({ photo, preview = false }: Props) {
       {expanded && (
         <Modal visible animationType="fade" presentationStyle="fullScreen" onRequestClose={() => setExpanded(false)}>
           <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1, backgroundColor: colors.paper, paddingHorizontal: 16 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: colors.paper, paddingHorizontal: styleToken("ChatPhoto.paddingHorizontal.b17ef6d19c","paddingHorizontal",16) }}>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel="Close room preview"
+                accessibilityLabel={t("ui.23bf436d39")}
                 onPress={() => setExpanded(false)}
-                style={{ alignSelf: 'flex-end', padding: 14 }}
+                style={{ alignSelf: 'flex-end', padding: styleToken("ChatPhoto.padding.8527a891e2","padding",14) }}
               >
-                <Text style={{ color: colors.accent, fontWeight: '600' }}>Close</Text>
+                <Text style={{ color: colors.accent, fontWeight: '600' }}>{t("ui.7d9eb7acb1")}</Text>
               </Pressable>
               <View style={{ flex: 1, justifyContent: 'center' }}>{image}</View>
             </SafeAreaView>

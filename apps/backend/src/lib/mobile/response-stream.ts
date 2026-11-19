@@ -1,3 +1,4 @@
+import {t} from "../../../../../packages/config/src/copy";
 // Read only the conversational string from partial structured output. Never
 // display JSON, unfinished escape sequences, or unvalidated product/card data.
 export function partialContent(json: string): string {
@@ -21,7 +22,7 @@ export function partialContent(json: string): string {
 
 export async function readModelResponse(response: Response, onText?: (text: string) => void) {
   if (!response.headers.get("content-type")?.includes("text/event-stream")) return response.json();
-  if (!response.body) throw new Error("Missing model stream");
+  if (!response.body) throw new Error(t("backend.d5ca88631a"));
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "", output = "";
@@ -42,12 +43,12 @@ export async function readModelResponse(response: Response, onText?: (text: stri
           const text = partialContent(output);
           if (text) onText?.(text);
         }
-        if (["response.failed", "response.incomplete", "error"].includes(event.type)) throw new Error("Model stream failed");
+        if (["response.failed", "response.incomplete", "error"].includes(event.type)) throw new Error(t("backend.cde4853aed"));
         if (event.type === "response.completed") completed = event.response;
       }
       if (done) break;
     }
-    if (!completed) throw new Error("Model stream interrupted");
+    if (!completed) throw new Error(t("backend.abb9391521"));
     return completed;
   } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
 }

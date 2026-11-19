@@ -1,3 +1,4 @@
+import { agentConfig } from "../../../../packages/config/src/public.ts";
 export type Product = {
   id: string; store_key: string; title: string; description: string | null;
   price: number; currency: string; available: boolean; image_url: string | null;
@@ -6,14 +7,10 @@ export type Product = {
   listing_id?: string; variant_id?: string; merchant_name?: string;
   variant_options?: Record<string, string>; variant_count?: number;
 };
-export const stores = [
-  { key: 'affirm_effect', name: 'Affirm Effect' }, { key: 'hashtini', name: 'Hashtini' },
-  { key: 'chaos_by_order', name: 'Chaos by Order' }, { key: 'maison_couvert', name: 'Maison Couvert' },
-  { key: 'dusk_and_drape', name: 'Dusk & Drape' },
-];
+export const stores = agentConfig.assortment.registry.merchants.map(m => ({key:m.id,name:m.label}));
 export const storeName = (key: string) => stores.find(s => s.key === key)?.name || key;
 export const merchantName = (product: Product) => product.merchant_name || storeName(product.store_key);
-export const price = (p: Product) => new Intl.NumberFormat('en-US', { style: 'currency', currency: p.currency }).format(Number(p.price));
+export const price = (p: Product) => new Intl.NumberFormat(agentConfig.locale, { style: 'currency', currency: p.currency }).format(Number(p.price));
 export type CheckoutLink = { url: string; merchant: string; storeKey: string; items: { productId: string; title: string; imageUrl?: string | null; variant: string | null; quantity: number; price: number; currency: string }[] };
 export type ChatPhoto = { id: string; ownerId: string };
 export type Message = { id: string; role: 'user' | 'assistant'; content: string; images?: ChatPhoto[]; previewImage?: ChatPhoto; previewContext?: string; products?: Product[]; checkoutLinks?: CheckoutLink[]; mode?: string; createdAt: number };
@@ -21,7 +18,7 @@ export type Conversation = { id: string; title: string; messages: Message[]; upd
 type Saved = { product: Product; active: boolean; updatedAt: number };
 type BagItem = { product: Product; quantity: number; updatedAt: number };
 export type ShopperState = {
-  schema: 1; historyClearedAt: number; profile: { name: string; preferences: string; updatedAt: number };
+  schema: 1; historyClearedAt: number; profile: { name: string; preferences: string; answers?: Record<string,string|string[]>; updatedAt: number };
   saved: Record<string, Saved>; bag: Record<string, BagItem>;
   conversations: Record<string, Conversation>; viewed: Record<string, { product: Product; updatedAt: number }>;
 };

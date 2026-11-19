@@ -1,3 +1,4 @@
+import {t} from "../../../../../packages/config/src/copy";
 import { boundedMap } from "../bounded-map";
 import type { Product } from "../types";
 import { requestedColors } from "../variant-colors";
@@ -11,8 +12,8 @@ export class CheckoutSelectionError extends Error {}
 export type ChatCheckout = { url: string; merchant: string; storeKey: string; items: { productId: string; title: string; imageUrl: string | null; variant: string | null; quantity: number; price: number; currency: string }[] };
 export async function prepareChatCheckout(raw: unknown, knownIds: Set<string>, signal: AbortSignal, colors: string[] = [], currentProducts: Map<string, Product> = new Map(), invoke = callArvivaTool) {
   const { items } = cartSchema.parse(raw);
-  if (new Set(items.map(item => item.productId)).size !== items.length) throw new Error("Each selected product must appear only once.");
-  if (items.some(item => !knownIds.has(item.productId))) throw new Error("Choose products already shown to the shopper before preparing checkout.");
+  if (new Set(items.map(item => item.productId)).size !== items.length) throw new Error(t("backend.ffe324167d"));
+  if (items.some(item => !knownIds.has(item.productId))) throw new Error(t("backend.665044024b"));
   // Reuse only this turn's verified details. The merchant cart tool still
   // performs its own fresh inventory/variant validation before returning a URL.
   const missing = items.filter(item => !currentProducts.has(item.productId));
@@ -21,13 +22,13 @@ export async function prepareChatCheckout(raw: unknown, knownIds: Set<string>, s
   for (const product of fetched) currentProducts.set(product.id, product);
   const verified = currentProducts;
   const products = items.flatMap(item => verified.has(item.productId) ? [verified.get(item.productId)!] : []);
-  if (products.length !== items.length) throw new Error("Some selected pieces could not be found. Ask the shopper to choose again.");
+  if (products.length !== items.length) throw new Error(t("backend.2faa100fb6"));
   if (colors.length && products.some(product => {
     // Shopify merchants use both "Default" and "Default Title" for an
     // unconfigured option. Neither is a color; use the product's identity.
     const identity = !product.variant_title?.trim() || /^default(?: title)?$/i.test(product.variant_title.trim()) ? product.title : product.variant_title;
     return !requestedColors(identity).some(color => colors.includes(color));
-  })) throw new CheckoutSelectionError("The selected variant does not confirm the requested color. Choose the exact matching variant before checkout.");
+  })) throw new CheckoutSelectionError(t("backend.086e160e8f"));
   const groups = new Map<string, typeof items>();
   for (const item of items) {
     const product = products.find(product => product.id === item.productId)!;
@@ -37,10 +38,10 @@ export async function prepareChatCheckout(raw: unknown, knownIds: Set<string>, s
     try {
       const store = getStore(storeKey);
       const first = products.find(product => product.store_key === storeKey)!;
-      if (!store && !first.listing_id) throw new Error("Unknown merchant");
+      if (!store && !first.listing_id) throw new Error(t("backend.7c4347854c"));
       const result = z.object({ cartUrl: z.string().url() }).parse(await invoke("create_cart_link", { items: selection }, signal));
       const url = new URL(result.cartUrl);
-      if (url.protocol !== "https:" || (!first.listing_id && url.hostname !== store!.storefrontDomain) || url.username || url.password || url.port) throw new Error("Invalid merchant checkout URL");
+      if (url.protocol !== "https:" || (!first.listing_id && url.hostname !== store!.storefrontDomain) || url.username || url.password || url.port) throw new Error(t("backend.82b0170c14"));
       return { status: "fulfilled", value: { url: url.toString(), merchant: first.merchant_name || store?.name || storeKey, storeKey, items: selection.map(item => {
         const product = products.find(product => product.id === item.productId)!;
         return { productId: product.id, title: product.title, imageUrl: product.image_url, variant: product.variant_title, quantity: item.quantity, price: product.price, currency: product.currency };

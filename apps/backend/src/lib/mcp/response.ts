@@ -1,19 +1,20 @@
+import {t} from "../../../../../packages/config/src/copy";
 const maximumBytes = 4_000_000;
 
 function matchingResult(value: unknown, id: string): { result: unknown } | undefined {
   if (!value || typeof value !== "object" || !("id" in value) || value.id !== id) return;
-  if (!("jsonrpc" in value) || value.jsonrpc !== "2.0" || "error" in value || !("result" in value)) throw new Error("Shopping MCP returned a protocol error");
+  if (!("jsonrpc" in value) || value.jsonrpc !== "2.0" || "error" in value || !("result" in value)) throw new Error(t("backend.e121952551"));
   return { result: value.result };
 }
 function parse(text: string): unknown {
   try { return JSON.parse(text); }
-  catch { throw new Error("Shopping MCP returned invalid JSON"); }
+  catch { throw new Error(t("backend.89ffdb63c4")); }
 }
 
 export async function readMcpResponse(response: Response, id: string, signal: AbortSignal): Promise<unknown> {
   if (!response.body || Number(response.headers.get("content-length")) > maximumBytes) {
     void response.body?.cancel().catch(() => {});
-    throw new Error("Invalid shopping MCP response size");
+    throw new Error(t("backend.bda8205ddb"));
   }
   const reader = response.body.getReader();
   const decoder = new TextDecoder("utf-8", { fatal: true });
@@ -36,7 +37,7 @@ export async function readMcpResponse(response: Response, id: string, signal: Ab
       finally { signal.removeEventListener("abort", cancel); }
       if (chunk.value) {
         bytes += chunk.value.byteLength;
-        if (bytes > maximumBytes) throw new Error("Shopping MCP response exceeds the size limit");
+        if (bytes > maximumBytes) throw new Error(t("backend.4868ca6761"));
       }
       text += chunk.done ? decoder.decode() : decoder.decode(chunk.value, { stream: true });
       if (streaming) {
@@ -57,7 +58,7 @@ export async function readMcpResponse(response: Response, id: string, signal: Ab
           const found = matchingResult(parse(text), id);
           if (found) return found.result;
         }
-        throw new Error("Shopping MCP returned an incomplete response");
+        throw new Error(t("backend.f6c6607629"));
       }
     }
   } finally {

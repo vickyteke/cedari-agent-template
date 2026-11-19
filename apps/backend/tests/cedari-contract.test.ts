@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({ database: vi.fn() }));
-vi.mock("@/lib/catalog", () => ({ getProducts: mocks.database, searchProducts: mocks.database, searchDistinctProducts: mocks.database }));
 vi.mock("@/lib/mcp/auth", async original => ({ ...await original<typeof import("@/lib/mcp/auth")>(), mobilePrincipal: async () => ({ id: "customer-a", anonymous: false }), mcpPrincipal: async () => ({ id: "fixture-agent", permissions: ["catalog:read", "checkout:create"], limit: 120 }) }));
 vi.mock("@/lib/mobile/http", async original => ({ ...await original<typeof import("@/lib/mobile/http")>(), rateLimit: async () => true }));
 vi.mock("@/lib/mcp/admission", () => ({ acquireLease: async () => "lease", releaseLease: async () => {} }));
@@ -10,7 +9,6 @@ import { callArvivaTool, clearMcpMetadataCache, listArvivaTools } from "@/lib/mc
 import { cedariProductId } from "@/lib/mcp/identity";
 import { mobileProducts } from "@/lib/mcp/products";
 import { GET as catalog } from "@/app/api/mobile/catalog/route";
-import { POST as publicMcp } from "./fixtures/legacy-mcp-server";
 import { POST as checkout } from "@/app/api/mobile/checkout/route";
 import { POST as mobileChat } from "@/app/api/mobile/chat/route";
 import { shoppingReply, chatInput } from "@/lib/mobile/assistant";
@@ -80,27 +78,6 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); clearMcpMetadataCache(); });
 
 describe("Cedari adapter over HTTP MCP", () => {
-  it.each(["Toys", "Clothing", "Electronics", "Uncategorized", "Curtains accessories for phones"])("blocks non-home category %s across discovery, direct lookup and checkout", async category => {
-    transport(); current.category = category;
-    expect(mobileProducts(await callArvivaTool("search_products", {}))).toEqual([]);
-    const lookup = await callArvivaTool("get_products", { productIds: [id] });
-    expect(lookup).toMatchObject({ products: [], missingProductIds: [id] });
-    expect(mobileProducts(await callArvivaTool("compare_products", { productIds: [id, cedariProductId("lst_curtain", "var_black")] }))).toEqual([]);
-    await expect(callArvivaTool("create_cart_link", { items: [{ productId: id, quantity: 1 }] }, undefined, context)).rejects.toMatchObject({ status: 409 });
-    expect(requests.some(rpc => rpc.params?.name === "create_checkout")).toBe(false);
-  });
-  it("does not send explicit non-home category searches upstream", async () => {
-    transport();
-    expect(await callArvivaTool("search_products", { category: "Toys" })).toMatchObject({ products: [] });
-    expect(requests).toEqual([]);
-  });
-
-  it("scopes the All home query upstream before its result limit", async () => {
-    transport();
-    const result = mobileProducts(await callArvivaTool("search_products", { limit: 24, distinctProducts: true }));
-    expect(result).toHaveLength(1);
-    expect(requests.find(rpc => rpc.params?.name === "search_products")?.params.arguments).toMatchObject({ categories: expect.arrayContaining(["rugs", "curtains", "lighting"]), limit: 24 });
-  });
   it("discovers upstream capabilities and exposes the app's adapted tools", async () => {
     transport();
     const tools = await listArvivaTools();
@@ -110,7 +87,7 @@ describe("Cedari adapter over HTTP MCP", () => {
   it("maps budget, stock, merchant and family exclusions to the new search schema", async () => {
     transport();
     const result = mobileProducts(await callArvivaTool("search_products", { query: "linen", maxPrice: 50.16, minPrice: 1.01, store: "hashtini", distinctProducts: true, excludeProductIds: [id] }));
-    expect(requests.at(-1)?.params.arguments).toMatchObject({ query: "linen", min_price_minor: 101, max_price_minor: 5016, currency: "USD", in_stock: true, merchant_ids: ["mrc_arviva_hashtini"], exclude_listing_ids: ["lst_curtain"] });
+    expect(requests.at(-1)?.params.arguments).toMatchObject({ query: "linen", min_price_minor: 101, max_price_minor: 5016, currency: "USD", in_stock: true, merchant_ids: ["hashtini"], exclude_listing_ids: ["lst_curtain"] });
     expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({ listing_id: "lst_curtain", variant_id: "var_black", price: 45.16, merchant_name: "New independent shop", variant_count: 12 });
     expect(mocks.database).not.toHaveBeenCalled();
@@ -201,13 +178,6 @@ describe("Cedari adapter over HTTP MCP", () => {
     expect(commerceContext(new Request("https://arviva.example"), "a")).not.toHaveProperty("buyerIp");
     expect(commerceContext(new Request("https://arviva.example", { headers: { "x-forwarded-for": "not-an-ip" } }), "a")).not.toHaveProperty("buyerIp");
     expect(commerceContext(new Request("https://arviva.example", { headers: { "x-forwarded-for": "2001:db8::1, 10.0.0.1" } }), "a")).toHaveProperty("buyerIp", "2001:db8::1");
-  });
-  it("routes the public OAuth MCP facade through Cedari without touching the SQL catalog", async () => {
-    transport();
-    const response = await publicMcp(new Request("https://arviva.example/api/mcp", { method: "POST", body: JSON.stringify({ jsonrpc: "2.0", id: "request-one", method: "tools/call", params: { name: "get_products", arguments: { productIds: [id] } } }) }));
-    const rpc = await response.json();
-    expect(rpc.result.structuredContent.products[0]).toMatchObject({ id, listingId: "lst_curtain", variantId: "var_beige", storeName: "New independent shop" });
-    expect(mocks.database).not.toHaveBeenCalled();
   });
   it("preserves a successful chat checkout when another Cedari merchant fails", async () => {
     transport();
@@ -319,16 +289,6 @@ describe("Cedari adapter over HTTP MCP", () => {
     const response = await mobileChat(new Request("https://arviva.example/api/mobile/chat", { method: "POST", body: "x".repeat(192001) }));
     expect(response.status).toBe(413);
     expect(requests).toEqual([]);
-  });
-  it("lets external agents supply validated buyer context without forwarding their own server IP", async () => {
-    transport();
-    const request = (buyerIp: string) => new Request("https://arviva.example/api/mcp", { method: "POST", headers: { "x-forwarded-for": "203.0.113.20" }, body: JSON.stringify({ jsonrpc: "2.0", id: "request-one", method: "tools/call", params: { name: "create_cart_link", arguments: { items: [{ productId: id, quantity: 1 }], idempotencyKey: context.idempotencyKey, buyerIp } } }) });
-    const invalid = await (await publicMcp(request("not-an-ip"))).json();
-    expect(invalid.result.isError).toBe(true);
-    expect(requests).toEqual([]);
-    const response = await (await publicMcp(request("2001:db8::9"))).json();
-    expect(response.result.isError).not.toBe(true);
-    expect(requests.at(-1)?.params.arguments.buyer_ip).toBe("2001:db8::9");
   });
   it("evicts broken protocol state before the next operation without replaying the failed call", async () => {
     const fetcher = transport();

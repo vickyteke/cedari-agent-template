@@ -1,6 +1,6 @@
 // A stream must end with an explicit validated completion. Partial replies are
 // temporary UI state and must never be persisted as completed conversations.
-export async function consumeChatStream<T>(body: ReadableStream<Uint8Array>, onText?: (text: string) => void, onStatus?: (status: string) => void): Promise<T> {
+export async function consumeChatStream<T>(body: ReadableStream<Uint8Array>, onText?: (text: string) => void, onStatus?: (status: string, phase?: "image" | "chat") => void): Promise<T> {
   const reader = body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -17,7 +17,7 @@ export async function consumeChatStream<T>(body: ReadableStream<Uint8Array>, onT
         const event = JSON.parse(data);
         if (event.type === 'error') throw new Error(event.error || 'Could not finish the reply. Please try again.');
         if (event.type === 'text') onText?.(event.text);
-        if (event.type === 'status') onStatus?.(event.status);
+        if (event.type === 'status') onStatus?.(event.status, event.phase);
         if (event.type === 'complete') return event.result as T;
       }
       if (buffer.length > 2000000) throw new Error('Unexpected chat response.');

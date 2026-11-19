@@ -1,3 +1,5 @@
+import { styleToken } from "../../../../packages/config/src/theme.ts";
+import { theme } from "../../../../packages/config/src/public.ts";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AccessibilityInfo, Animated, Easing, Keyboard, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -43,7 +45,7 @@ function CollapsingBar({ hidden, reduceMotion, height, children, direction }: {
 }) {
   const [progress] = useState(() => new Animated.Value(0));
   useEffect(() => {
-    const animation = Animated.timing(progress, { toValue: hidden ? 1 : 0, duration: reduceMotion ? 0 : duration, easing: Easing.inOut(Easing.cubic), useNativeDriver: false, isInteraction: false });
+    const animation = Animated.timing(progress, { toValue: hidden ? 1 : 0, duration: reduceMotion || !theme.motion.enabled ? 0 : duration, easing: Easing.inOut(Easing.cubic), useNativeDriver: false, isInteraction: false });
     animation.start();
     return () => animation.stop();
   }, [hidden, reduceMotion, progress]);
@@ -59,7 +61,7 @@ export function ScrollHeader({ children }: { children: ReactNode }) {
   return <CollapsingBar hidden={chrome.hidden} reduceMotion={chrome.reduceMotion} height={height} direction={-1}><View onLayout={event => setHeight(event.nativeEvent.layout.height)}>{children}</View></CollapsingBar>;
 }
 
-const floatingBarHeight = 56;
+const floatingBarHeight = theme.navigation.height;
 const floatingBarGap = 12;
 
 export function FloatingTabBar({ children }: { children: ReactNode }) {
@@ -70,7 +72,7 @@ export function FloatingTabBar({ children }: { children: ReactNode }) {
   const reduceMotion = chrome?.reduceMotion ?? true;
   useEffect(() => {
     const animation = Animated.timing(scale, {
-      toValue: compact ? 0.75 : 1, duration: reduceMotion ? 0 : duration,
+      toValue: compact ? theme.motion.compactScale : 1, duration: reduceMotion || !theme.motion.enabled ? 0 : duration,
       easing: Easing.inOut(Easing.cubic), useNativeDriver: true, isInteraction: false,
     });
     animation.start();
@@ -81,10 +83,10 @@ export function FloatingTabBar({ children }: { children: ReactNode }) {
   if (chrome?.keyboard) return null;
   return <View pointerEvents="box-none" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, alignItems: 'center', paddingBottom: Math.max(insets.bottom, floatingBarGap) }}>
     <Animated.View style={{
-      width: '92%', maxWidth: 480, height: floatingBarHeight, borderRadius: 36,
-      backgroundColor: 'rgba(255,252,248,0.82)', flexDirection: 'row', paddingHorizontal: 6, alignItems: 'center',
-      borderWidth: 1, borderColor: 'rgba(255,255,255,0.8)',
-      shadowColor: '#35271f', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.13, shadowRadius: 16, elevation: 8,
+      width: '92%', maxWidth: theme.navigation.maxWidth, height: floatingBarHeight, borderRadius: theme.navigation.radius,
+      backgroundColor: styleToken("ScrollChrome.backgroundColor.09daa71dc2","backgroundColor",'rgba(255,252,248,0.82)'), flexDirection: 'row', paddingHorizontal: styleToken("ScrollChrome.paddingHorizontal.e7f6c01177","paddingHorizontal",6), alignItems: 'center',
+      borderWidth: styleToken("ScrollChrome.borderWidth.6b86b273ff","borderWidth",1), borderColor: styleToken("ScrollChrome.borderColor.28e2f381d3","borderColor",'rgba(255,255,255,0.8)'),
+      shadowColor: '#35271f', shadowOffset: { width: styleToken("ScrollChrome.width.5feceb66ff","width",0), height: styleToken("ScrollChrome.height.4b227777d4","height",4) }, shadowOpacity: theme.shadowOpacity, shadowRadius: styleToken("ScrollChrome.shadowRadius.b17ef6d19c","shadowRadius",16), elevation: styleToken("ScrollChrome.elevation.2c624232cd","elevation",8),
       // Keep the lower edge in place as the whole capsule scales to 75%.
       transform: [{ translateY: scale.interpolate({ inputRange: [0.75, 1], outputRange: [floatingBarHeight / 8, 0] }) }, { scale }],
     }}>{children}</Animated.View>

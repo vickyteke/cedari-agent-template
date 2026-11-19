@@ -1,3 +1,4 @@
+import {t} from "../../../../packages/config/src/copy.ts";
 // Only known literal colors enter the database filter, never arbitrary query text.
 const colors = ['beige','ivory','cream','white','black','green','blue','red','pink','yellow','orange','brown','gray','grey','purple','teal','taupe','burgundy','navy'] as const;
 export function requestedColors(query: string = '') {
@@ -7,7 +8,7 @@ export function requestedColors(query: string = '') {
 export function variantColorFilter(query: string) {
   return requestedColors(query).flatMap(color => [
     `variant_title.ilike.%${color}%`,
-    `and(variant_title.eq.Default Title,title.ilike.%${color}%)`,
+    t("dynamic.048588d267",{value0: String(color)}),
   ]).join(',');
 }
 

@@ -1,3 +1,6 @@
+import {t} from "../../../../../packages/config/src/copy";
+import { imageProvider } from "../providers/current";
+import { agentConfig } from "../../../../../packages/config/src/public";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import sharp from "sharp";
 import { z } from "zod";
@@ -80,8 +83,8 @@ async function downloadImage(url: URL | string, signal: AbortSignal) {
 function catalogImage(url: string) {
   const source = new URL(url);
   if (source.protocol !== "https:" || source.username || source.password || source.port) throw new Error("image_host");
-  if (source.hostname === "cdn.shopify.com") return source;
-  if (source.hostname === "www.arviva.space" && /^\/api\/product-image\/[a-f0-9-]{36}$/i.test(source.pathname)) return source;
+  const hosts=(process.env.IMAGE_REFERENCE_HOSTS || "cdn.shopify.com").split(",").map(host=>host.trim()).filter(Boolean);
+  if (hosts.includes(source.hostname) && !/^(localhost|127\.|10\.|192\.168\.|169\.254\.)/.test(source.hostname) && !source.hostname.endsWith(".local")) return source;
   throw new Error("image_host");
 }
 
@@ -91,23 +94,23 @@ const reply = (content: string): PreviewReply => ({ content, products: [], check
 export async function roomPreviewReply(input: ChatInput, progress: ChatProgress) {
   const key = process.env.OPENAI_API_KEY;
   const owner = progress.photoOwnerId;
-  const enabled = process.env.ROOM_PREVIEW_ENABLED === "true";
+  const enabled = agentConfig.features.roomPreviews && agentConfig.agent.photoWorkflows.includes("room-preview") && process.env.ROOM_PREVIEW_ENABLED === "true";
   const last = input.messages.at(-1)!;
   const previous = input.messages.at(-2);
   const fresh = previewIntent(last.content);
   if (!enabled || !input.roomPreview || !key || !owner) {
     if (!fresh && !previous?.previewContext) return;
     if (enabled && !input.roomPreview) {
-      return reply("Room previews are available in the updated Arviva app. Refresh this page or update the app, then ask me to show that piece again.");
+      return reply(t("backend.817b0cc946"));
     }
     if (input.roomPreview) {
-      return reply("Room previews aren’t available in this session right now. Your photo can still help me recommend pieces, or you can try the preview again later.");
+      return reply(t("backend.ed2fe9e6e8"));
     }
     return;
   }
   const pending = previous?.role === "assistant" ? unseal(previous.previewContext, key, owner) : undefined;
   if (!fresh && !pending) return;
-  if (pending && /^(?:no thanks|cancel|never mind|nevermind|skip)[.!\s]*$/i.test(last.content)) return reply("Of course. We can keep looking whenever you’re ready.");
+  if (pending && /^(?:no thanks|cancel|never mind|nevermind|skip)[.!\s]*$/i.test(last.content)) return reply(t("backend.38ea7579d7"));
 
   if (pending?.step === "photo" && !fresh && !last.images?.length) return;
   if (pending?.step === "product" && !fresh && !last.images?.length && !selectedResult(last.content, pending.ids)) return;
@@ -127,14 +130,14 @@ export async function roomPreviewReply(input: ChatInput, progress: ChatProgress)
   if (last.images?.length) {
     if (last.images.length !== 1 || last.images[0].ownerId !== owner) {
       state.photo = undefined;
-      return ask("Could you attach just the one photo you’d like me to use?", state.selected ? "photo" : "product");
+      return ask(t("backend.05c90f599c"), state.selected ? "photo" : "product");
     }
     state.photo = last.images[0];
   }
-  if (!state.ids.length) return reply("Which piece would you like to see? Ask me for a few wall décor options first, then tell me which one to try.");
+  if (!state.ids.length) return reply(t("backend.8a9fa99f00"));
   if (!state.selected) state.selected = selectedResult(last.content, state.ids);
-  if (!state.selected) return ask("Which piece from my last set should I try? You can say something like “the third one.”", "product");
-  if (!state.photo) return ask("Attach a photo of the wall or floor you’d like to use, and I’ll help you picture it there.", "photo");
+  if (!state.selected) return ask(t("backend.a006108d45"), "product");
+  if (!state.photo) return ask(t("backend.0405433792"), "photo");
 
   // A new photo or product always gets a placement confirmation before a paid edit.
   const confirmed = state === pending && pending.step === "placement" && !last.images?.length && placementReply(last.content);
@@ -145,38 +148,38 @@ export async function roomPreviewReply(input: ChatInput, progress: ChatProgress)
   try {
     const products = mobileProducts(await callArvivaTool("get_products", { productIds: [productId] }, signal, progress.commerce));
     const product = products.find(item => item.id === productId);
-    if (!product?.image_url) return reply("I couldn’t verify a photo for that exact piece. We can try another one from the results.");
+    if (!product?.image_url) return reply(t("backend.cf22697d1e"));
     const descriptor = product.title + " " + (product.product_type || "");
     const rug = /\b(?:rug|rugs|runner)\b/i.test(descriptor);
-    if (!rug && !/\b(?:wall|art|painting|print|canvas|poster|mirror|tapestry)\b/i.test(descriptor)) return reply("I can make previews for wall décor and rugs in this pilot. Would you like to try one of those?");
+    if (!rug && !/\b(?:wall|art|painting|print|canvas|poster|mirror|tapestry)\b/i.test(descriptor)) return reply(t("backend.c5a8688a72"));
     const source = catalogImage(product.image_url);
     const name = product.title.replace(/[\r\n]/g, " ").slice(0, 160);
     if (!confirmed) return ask(
       rug
-        ? `I can show you **${name}** in your photo. Where should I put the rug? You can say “center it in the seating area,” or tell me another spot.`
-        : `I can show you **${name}** on your wall. Where should I hang it? You can say “center it at eye level,” or describe another spot.`,
+        ? t("dynamic.ed4fb3e970",{value0: String(name)})
+        : t("dynamic.24aba13a41",{value0: String(name)}),
       "placement",
     );
     if (!/^try again[.!\s]*$/i.test(last.content)) state.placement = last.content.slice(0, 300);
-    if (input.requestId && !await budget(`room-preview:turn:${owner}:${input.requestId}`, 1, 1800)) return ask("I already started that preview. If it didn’t come through, say “try again.”", "placement");
+    if (input.requestId && !await budget(`room-preview:turn:${owner}:${input.requestId}`, 1, 1800)) return ask(t("backend.fcdd07763d"), "placement");
     if (!await budget(`room-preview:user:${owner}`, 3, 86400)
-      || !await budget("room-preview:pool", 30, 86400)) return reply("The room preview allowance has been reached for now. Please try again after the daily reset.");
+      || !await budget("room-preview:pool", 30, 86400)) return reply(t("backend.122ec98406"));
     lease = await acquireLease("arviva-public");
-    if (!lease) return ask("Room previews are busy. Say “try again” in a moment and I’ll use the same piece.", "placement");
+    if (!lease) return ask(t("backend.de0aaa6978"), "placement");
 
-    progress.onStatus?.("Creating your room preview…");
+    progress.onStatus?.(t("backend.b23bf99fee"), "image");
     const roomUrl = await photoUrl(owner, state.photo.id);
     const [room, reference] = await Promise.all([downloadImage(roomUrl, signal), downloadImage(source, signal)]);
     const normalized = await sharp(reference, { limitInputPixels: 16_000_000 }).rotate().resize(1024, 1024, { fit: "inside", withoutEnlargement: true }).jpeg({ quality: 85 }).toBuffer();
     const form = new FormData();
     form.append("image[]", new Blob([new Uint8Array(room)], { type: "image/jpeg" }), "room.jpg");
     form.append("image[]", new Blob([new Uint8Array(normalized)], { type: "image/jpeg" }), "variant.jpg");
-    form.set("model", "gpt-image-2.6-flare");
+    form.set("model", agentConfig.agent.imageModel);
     form.set("quality", "medium");
     form.set("output_format", "jpeg");
     form.set("n", "1");
-    form.set("prompt", `Edit the first image, the shopper's room. Add only the ${rug ? "rug" : "wall décor"} shown in the second reference image. Use the exact product design, colors and pattern. Match lighting and perspective, preserve the rest of the room and the original framing. Use the following shopper placement note only to choose where and how to position that one product. If no location is given, use a natural centered position. Placement note: ${state.placement || "natural centered position"}. Return the edited room photograph without labels or text.`);
-    const response = await fetch("https://api.openai.com/v1/images/edits", { method: "POST", headers: { Authorization: `Bearer ${key}` }, body: form, signal });
+    form.set("prompt", t("dynamic.960269a9e4",{value0: String(rug ? "rug" : "wall décor"),value1: String(state.placement || t("backend.6e2dc0bb97"))}));
+    const response = await imageProvider.edit(form, signal);
     if (!response.ok || !response.body) throw new Error("preview_failed");
     const result = JSON.parse(Buffer.from(await boundedBytes(response.body, 10_000_000, 8000)).toString());
     const encoded = result.data?.[0]?.b64_json;
@@ -186,11 +189,11 @@ export async function roomPreviewReply(input: ChatInput, progress: ChatProgress)
     if (output.length > 262144) output = await pipeline.resize(768, 768, { fit: "inside", withoutEnlargement: true }).jpeg({ quality: 65 }).toBuffer();
     if (output.length > 262144) throw new Error("preview_size");
     const previewImage = await savePhoto(owner, output);
-    return { ...reply(`Here’s how **${name}** could look in your space. This is an AI preview, so check the original product photo and listed dimensions before deciding.`), previewImage, products: [product] };
+    return { ...reply(t("dynamic.0c355ec2d7",{value0: String(name)})), previewImage, products: [product] };
   } catch {
     return confirmed
-      ? ask("I couldn’t finish that preview. You can attach the photo again or say “try again” to use the same placement.", "placement")
-      : reply("I couldn’t get that piece ready for a room preview. Please ask me to try the piece again.");
+      ? ask(t("backend.0d4a1f542b"), "placement")
+      : reply(t("backend.6367ad48a3"));
   } finally {
     if (lease) await releaseLease(lease).catch(() => {});
   }

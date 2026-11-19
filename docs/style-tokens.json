@@ -1,0 +1,1062 @@
+{
+  "bag.marginBottom.b7a56873cd": {
+    "property": "marginBottom",
+    "value": 25
+  },
+  "bag.marginBottom.4ec9599fc2": {
+    "property": "marginBottom",
+    "value": 18
+  },
+  "bag.marginBottom.f5ca38f748": {
+    "property": "marginBottom",
+    "value": 20
+  },
+  "bag.width.3ada92f28b": {
+    "property": "width",
+    "value": 66
+  },
+  "bag.height.48449a14a4": {
+    "property": "height",
+    "value": 80
+  },
+  "bag.borderRadius.2c624232cd": {
+    "property": "borderRadius",
+    "value": 8
+  },
+  "bag.fontSize.8527a891e2": {
+    "property": "fontSize",
+    "value": 14
+  },
+  "bag.lineHeight.6f4b661212": {
+    "property": "lineHeight",
+    "value": 21
+  },
+  "bag.minHeight.86e5014965": {
+    "property": "minHeight",
+    "value": 34
+  },
+  "bag.paddingHorizontal.8527a891e2": {
+    "property": "paddingHorizontal",
+    "value": 14
+  },
+  "bag.marginBottom.6b51d431df": {
+    "property": "marginBottom",
+    "value": 12
+  },
+  "discover.paddingVertical.4e07408562": {
+    "property": "paddingVertical",
+    "value": 3
+  },
+  "discover.borderRadius.59e19706d5": {
+    "property": "borderRadius",
+    "value": 28
+  },
+  "discover.marginBottom.4ec9599fc2": {
+    "property": "marginBottom",
+    "value": 18
+  },
+  "discover.paddingVertical.6b51d431df": {
+    "property": "paddingVertical",
+    "value": 12
+  },
+  "discover.gap.2c624232cd": {
+    "property": "gap",
+    "value": 8
+  },
+  "discover.paddingBottom.6b51d431df": {
+    "property": "paddingBottom",
+    "value": 12
+  },
+  "discover.marginBottom.b7a56873cd": {
+    "property": "marginBottom",
+    "value": 25
+  },
+  "discover.paddingVertical.2c624232cd": {
+    "property": "paddingVertical",
+    "value": 8
+  },
+  "discover.marginBottom.f5ca38f748": {
+    "property": "marginBottom",
+    "value": 20
+  },
+  "index.paddingHorizontal.4ec9599fc2": {
+    "property": "paddingHorizontal",
+    "value": 18
+  },
+  "index.paddingVertical.7902699be4": {
+    "property": "paddingVertical",
+    "value": 7
+  },
+  "index.minHeight.5feceb66ff": {
+    "property": "minHeight",
+    "value": 0
+  },
+  "index.padding.785f3ec7eb": {
+    "property": "padding",
+    "value": 22
+  },
+  "index.paddingBottom.f5ca38f748": {
+    "property": "paddingBottom",
+    "value": 20
+  },
+  "index.paddingTop.785f3ec7eb": {
+    "property": "paddingTop",
+    "value": 22
+  },
+  "index.maxWidth.deeeb5df3f": {
+    "property": "maxWidth",
+    "value": 350
+  },
+  "index.marginBottom.624b60c58c": {
+    "property": "marginBottom",
+    "value": 30
+  },
+  "index.gap.4a44dc1536": {
+    "property": "gap",
+    "value": 10
+  },
+  "index.borderRadius.b17ef6d19c": {
+    "property": "borderRadius",
+    "value": 16
+  },
+  "index.paddingVertical.4ec9599fc2": {
+    "property": "paddingVertical",
+    "value": 18
+  },
+  "index.minWidth.5feceb66ff": {
+    "property": "minWidth",
+    "value": 0
+  },
+  "index.fontSize.4a44dc1536": {
+    "property": "fontSize",
+    "value": 10
+  },
+  "index.lineHeight.9400f1b21c": {
+    "property": "lineHeight",
+    "value": 19
+  },
+  "index.marginTop.b7a56873cd": {
+    "property": "marginTop",
+    "value": 25
+  },
+  "index.marginBottom.785f3ec7eb": {
+    "property": "marginBottom",
+    "value": 22
+  },
+  "index.padding.b17ef6d19c": {
+    "property": "padding",
+    "value": 16
+  },
+  "index.borderRadius.4ec9599fc2": {
+    "property": "borderRadius",
+    "value": 18
+  },
+  "index.gap.2c624232cd": {
+    "property": "gap",
+    "value": 8
+  },
+  "index.lineHeight.785f3ec7eb": {
+    "property": "lineHeight",
+    "value": 22
+  },
+  "index.fontSize.e629fa6598": {
+    "property": "fontSize",
+    "value": 15
+  },
+  "index.marginBottom.4a44dc1536": {
+    "property": "marginBottom",
+    "value": 10
+  },
+  "index.gap.8527a891e2": {
+    "property": "gap",
+    "value": 14
+  },
+  "index.paddingTop.4ec9599fc2": {
+    "property": "paddingTop",
+    "value": 18
+  },
+  "index.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "index.gap.6b51d431df": {
+    "property": "gap",
+    "value": 12
+  },
+  "index.minHeight.5ec1a0c99d": {
+    "property": "minHeight",
+    "value": 144
+  },
+  "index.borderRadius.6b51d431df": {
+    "property": "borderRadius",
+    "value": 12
+  },
+  "index.width.71ee45a3c0": {
+    "property": "width",
+    "value": 44
+  },
+  "index.height.71ee45a3c0": {
+    "property": "height",
+    "value": 44
+  },
+  "index.borderRadius.785f3ec7eb": {
+    "property": "borderRadius",
+    "value": 22
+  },
+  "index.borderWidth.6b86b273ff": {
+    "property": "borderWidth",
+    "value": 1
+  },
+  "index.paddingTop.4a44dc1536": {
+    "property": "paddingTop",
+    "value": 10
+  },
+  "index.paddingBottom.4a44dc1536": {
+    "property": "paddingBottom",
+    "value": 10
+  },
+  "index.borderTopWidth.6b86b273ff": {
+    "property": "borderTopWidth",
+    "value": 1
+  },
+  "index.paddingVertical.2c624232cd": {
+    "property": "paddingVertical",
+    "value": 8
+  },
+  "index.paddingHorizontal.e7f6c01177": {
+    "property": "paddingHorizontal",
+    "value": 6
+  },
+  "index.fontSize.8527a891e2": {
+    "property": "fontSize",
+    "value": 14
+  },
+  "index.width.48449a14a4": {
+    "property": "width",
+    "value": 80
+  },
+  "index.width.f74efabef1": {
+    "property": "width",
+    "value": 76
+  },
+  "index.height.f74efabef1": {
+    "property": "height",
+    "value": 76
+  },
+  "index.paddingVertical.e7f6c01177": {
+    "property": "paddingVertical",
+    "value": 6
+  },
+  "index.marginBottom.e7f6c01177": {
+    "property": "marginBottom",
+    "value": 6
+  },
+  "index.borderRadius.59e19706d5": {
+    "property": "borderRadius",
+    "value": 28
+  },
+  "index.paddingVertical.4b227777d4": {
+    "property": "paddingVertical",
+    "value": 4
+  },
+  "index.paddingRight.e7f6c01177": {
+    "property": "paddingRight",
+    "value": 6
+  },
+  "index.paddingVertical.6b51d431df": {
+    "property": "paddingVertical",
+    "value": 12
+  },
+  "index.maxHeight.9bdb2af679": {
+    "property": "maxHeight",
+    "value": 110
+  },
+  "index.borderRadius.c2356069e9": {
+    "property": "borderRadius",
+    "value": 24
+  },
+  "index.padding.6b51d431df": {
+    "property": "padding",
+    "value": 12
+  },
+  "index.paddingTop.7902699be4": {
+    "property": "paddingTop",
+    "value": 7
+  },
+  "index.backgroundColor.848cea16c1": {
+    "property": "backgroundColor",
+    "value": "#00000055"
+  },
+  "index.padding.c2356069e9": {
+    "property": "padding",
+    "value": 24
+  },
+  "index.paddingBottom.d59eced1de": {
+    "property": "paddingBottom",
+    "value": 40
+  },
+  "index.marginVertical.6b51d431df": {
+    "property": "marginVertical",
+    "value": 12
+  },
+  "profile.marginVertical.6b51d431df": {
+    "property": "marginVertical",
+    "value": 12
+  },
+  "profile.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "profile.marginBottom.f5ca38f748": {
+    "property": "marginBottom",
+    "value": 20
+  },
+  "profile.marginBottom.8527a891e2": {
+    "property": "marginBottom",
+    "value": 14
+  },
+  "profile.marginBottom.6b51d431df": {
+    "property": "marginBottom",
+    "value": 12
+  },
+  "profile.height.38d66d9692": {
+    "property": "height",
+    "value": 130
+  },
+  "profile.fontSize.6f4b661212": {
+    "property": "fontSize",
+    "value": 21
+  },
+  "profile.marginTop.4a44dc1536": {
+    "property": "marginTop",
+    "value": 10
+  },
+  "profile.marginVertical.8527a891e2": {
+    "property": "marginVertical",
+    "value": 14
+  },
+  "profile.paddingVertical.6b51d431df": {
+    "property": "paddingVertical",
+    "value": 12
+  },
+  "profile.borderBottomWidth.6b86b273ff": {
+    "property": "borderBottomWidth",
+    "value": 1
+  },
+  "profile.marginVertical.e629fa6598": {
+    "property": "marginVertical",
+    "value": 15
+  },
+  "profile.marginTop.e629fa6598": {
+    "property": "marginTop",
+    "value": 15
+  },
+  "profile.marginTop.c2356069e9": {
+    "property": "marginTop",
+    "value": 24
+  },
+  "saved.marginBottom.e629fa6598": {
+    "property": "marginBottom",
+    "value": 15
+  },
+  "saved.paddingVertical.4a44dc1536": {
+    "property": "paddingVertical",
+    "value": 10
+  },
+  "saved.fontSize.6b51d431df": {
+    "property": "fontSize",
+    "value": 12
+  },
+  "compare.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "compare.gap.b17ef6d19c": {
+    "property": "gap",
+    "value": 16
+  },
+  "compare.paddingTop.f5ca38f748": {
+    "property": "paddingTop",
+    "value": 20
+  },
+  "compare.width.a0eaec5a55": {
+    "property": "width",
+    "value": 230
+  },
+  "compare.height.39bb88f40d": {
+    "property": "height",
+    "value": 260
+  },
+  "compare.borderRadius.b17ef6d19c": {
+    "property": "borderRadius",
+    "value": 16
+  },
+  "compare.height.a512db2741": {
+    "property": "height",
+    "value": 160
+  },
+  "compare.paddingTop.e629fa6598": {
+    "property": "paddingTop",
+    "value": 15
+  },
+  "compare.fontSize.6f4b661212": {
+    "property": "fontSize",
+    "value": 21
+  },
+  "compare.lineHeight.5f9c4ab08c": {
+    "property": "lineHeight",
+    "value": 26
+  },
+  "compare.borderTopWidth.6b86b273ff": {
+    "property": "borderTopWidth",
+    "value": 1
+  },
+  "compare.paddingVertical.4523540f15": {
+    "property": "paddingVertical",
+    "value": 17
+  },
+  "compare.minHeight.48449a14a4": {
+    "property": "minHeight",
+    "value": 80
+  },
+  "[id].aspectRatio.8139b33952": {
+    "property": "aspectRatio",
+    "value": 0.9
+  },
+  "[id].borderRadius.f5ca38f748": {
+    "property": "borderRadius",
+    "value": 20
+  },
+  "[id].marginTop.f5ca38f748": {
+    "property": "marginTop",
+    "value": 20
+  },
+  "[id].marginBottom.b7a56873cd": {
+    "property": "marginBottom",
+    "value": 25
+  },
+  "[id].marginVertical.4a44dc1536": {
+    "property": "marginVertical",
+    "value": 10
+  },
+  "[id].marginVertical.785f3ec7eb": {
+    "property": "marginVertical",
+    "value": 22
+  },
+  "[id].marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "sign-in.paddingTop.9f14025af0": {
+    "property": "paddingTop",
+    "value": 35
+  },
+  "sign-in.marginBottom.59e19706d5": {
+    "property": "marginBottom",
+    "value": 28
+  },
+  "sign-in.marginBottom.2c624232cd": {
+    "property": "marginBottom",
+    "value": 8
+  },
+  "sign-in.marginVertical.4ec9599fc2": {
+    "property": "marginVertical",
+    "value": 18
+  },
+  "sign-in.marginTop.4ec9599fc2": {
+    "property": "marginTop",
+    "value": 18
+  },
+  "sign-in.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "sign-in.marginTop.b7a56873cd": {
+    "property": "marginTop",
+    "value": 25
+  },
+  "AppTabBar.height.98010bd927": {
+    "property": "height",
+    "value": 48
+  },
+  "AppTabBar.borderRadius.c2356069e9": {
+    "property": "borderRadius",
+    "value": 24
+  },
+  "AppTabBar.marginHorizontal.d4735e3a26": {
+    "property": "marginHorizontal",
+    "value": 2
+  },
+  "AppTabBar.minWidth.4523540f15": {
+    "property": "minWidth",
+    "value": 17
+  },
+  "AppTabBar.height.4523540f15": {
+    "property": "height",
+    "value": 17
+  },
+  "AppTabBar.paddingHorizontal.4e07408562": {
+    "property": "paddingHorizontal",
+    "value": 3
+  },
+  "AppTabBar.borderRadius.19581e27de": {
+    "property": "borderRadius",
+    "value": 9
+  },
+  "AppTabBar.fontSize.19581e27de": {
+    "property": "fontSize",
+    "value": 9
+  },
+  "ChatCheckoutCard.marginTop.b17ef6d19c": {
+    "property": "marginTop",
+    "value": 16
+  },
+  "ChatCheckoutCard.marginBottom.e629fa6598": {
+    "property": "marginBottom",
+    "value": 15
+  },
+  "ChatCheckoutCard.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "ChatCheckoutCard.gap.8527a891e2": {
+    "property": "gap",
+    "value": 14
+  },
+  "ChatCheckoutCard.marginBottom.f5ca38f748": {
+    "property": "marginBottom",
+    "value": 20
+  },
+  "ChatCheckoutCard.width.8b940be7fb": {
+    "property": "width",
+    "value": 88
+  },
+  "ChatCheckoutCard.height.9bdb2af679": {
+    "property": "height",
+    "value": 110
+  },
+  "ChatCheckoutCard.borderRadius.4a44dc1536": {
+    "property": "borderRadius",
+    "value": 10
+  },
+  "ChatCheckoutCard.fontSize.b17ef6d19c": {
+    "property": "fontSize",
+    "value": 16
+  },
+  "ChatCheckoutCard.lineHeight.785f3ec7eb": {
+    "property": "lineHeight",
+    "value": 22
+  },
+  "ChatCheckoutCard.marginBottom.ef2d127de3": {
+    "property": "marginBottom",
+    "value": 5
+  },
+  "ChatCheckoutCard.marginBottom.e7f6c01177": {
+    "property": "marginBottom",
+    "value": 6
+  },
+  "ChatMarkdown.fontSize.8527a891e2": {
+    "property": "fontSize",
+    "value": 14
+  },
+  "ChatMarkdown.lineHeight.535fa30d7e": {
+    "property": "lineHeight",
+    "value": 23
+  },
+  "ChatMarkdown.marginTop.4a44dc1536": {
+    "property": "marginTop",
+    "value": 10
+  },
+  "ChatMarkdown.marginBottom.2c624232cd": {
+    "property": "marginBottom",
+    "value": 8
+  },
+  "ChatMarkdown.lineHeight.35135aaa6c": {
+    "property": "lineHeight",
+    "value": 29
+  },
+  "ChatMarkdown.padding.6b51d431df": {
+    "property": "padding",
+    "value": 12
+  },
+  "ChatMarkdown.borderRadius.2c624232cd": {
+    "property": "borderRadius",
+    "value": 8
+  },
+  "ChatMarkdown.marginBottom.4a44dc1536": {
+    "property": "marginBottom",
+    "value": 10
+  },
+  "ChatMarkdown.gap.2c624232cd": {
+    "property": "gap",
+    "value": 8
+  },
+  "ChatMarkdown.marginBottom.4e07408562": {
+    "property": "marginBottom",
+    "value": 3
+  },
+  "ChatMarkdown.minWidth.f5ca38f748": {
+    "property": "minWidth",
+    "value": 20
+  },
+  "ChatMarkdown.paddingLeft.6b51d431df": {
+    "property": "paddingLeft",
+    "value": 12
+  },
+  "ChatMarkdown.marginVertical.2c624232cd": {
+    "property": "marginVertical",
+    "value": 8
+  },
+  "ChatMarkdown.height.6b86b273ff": {
+    "property": "height",
+    "value": 1
+  },
+  "ChatMarkdown.marginVertical.6b51d431df": {
+    "property": "marginVertical",
+    "value": 12
+  },
+  "ChatMarkdown.width.734d0759cd": {
+    "property": "width",
+    "value": 170
+  },
+  "ChatMarkdown.padding.2c624232cd": {
+    "property": "padding",
+    "value": 8
+  },
+  "ChatMarkdown.borderWidth.d2cbad71ff": {
+    "property": "borderWidth",
+    "value": 0.5
+  },
+  "ChatPhoto.padding.2c624232cd": {
+    "property": "padding",
+    "value": 8
+  },
+  "ChatPhoto.borderRadius.6b51d431df": {
+    "property": "borderRadius",
+    "value": 12
+  },
+  "ChatPhoto.marginBottom.2c624232cd": {
+    "property": "marginBottom",
+    "value": 8
+  },
+  "ChatPhoto.paddingHorizontal.b17ef6d19c": {
+    "property": "paddingHorizontal",
+    "value": 16
+  },
+  "ChatPhoto.padding.8527a891e2": {
+    "property": "padding",
+    "value": 14
+  },
+  "ChatWaiting.marginBottom.4a44dc1536": {
+    "property": "marginBottom",
+    "value": 10
+  },
+  "ChatWaiting.marginTop.8527a891e2": {
+    "property": "marginTop",
+    "value": 14
+  },
+  "ChatWaiting.padding.b17ef6d19c": {
+    "property": "padding",
+    "value": 16
+  },
+  "ChatWaiting.borderRadius.b17ef6d19c": {
+    "property": "borderRadius",
+    "value": 16
+  },
+  "ChatWaiting.marginBottom.e7f6c01177": {
+    "property": "marginBottom",
+    "value": 6
+  },
+  "ChatWaiting.fontSize.8527a891e2": {
+    "property": "fontSize",
+    "value": 14
+  },
+  "ChatWaiting.lineHeight.535fa30d7e": {
+    "property": "lineHeight",
+    "value": 23
+  },
+  "ChatWaiting.marginTop.4a44dc1536": {
+    "property": "marginTop",
+    "value": 10
+  },
+  "EmailEditButton.marginTop.8527a891e2": {
+    "property": "marginTop",
+    "value": 14
+  },
+  "EmailEditButton.marginTop.2c624232cd": {
+    "property": "marginTop",
+    "value": 8
+  },
+  "EmailPreferences.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "EmailPreferences.marginVertical.6b51d431df": {
+    "property": "marginVertical",
+    "value": 12
+  },
+  "EmailPreferences.marginVertical.2c624232cd": {
+    "property": "marginVertical",
+    "value": 8
+  },
+  "EmailPreferences.marginTop.b17ef6d19c": {
+    "property": "marginTop",
+    "value": 16
+  },
+  "Introduction.paddingHorizontal.f5ca38f748": {
+    "property": "paddingHorizontal",
+    "value": 20
+  },
+  "Introduction.paddingVertical.2c624232cd": {
+    "property": "paddingVertical",
+    "value": 8
+  },
+  "Introduction.minWidth.71ee45a3c0": {
+    "property": "minWidth",
+    "value": 44
+  },
+  "Introduction.minHeight.71ee45a3c0": {
+    "property": "minHeight",
+    "value": 44
+  },
+  "Introduction.fontSize.59e19706d5": {
+    "property": "fontSize",
+    "value": 28
+  },
+  "Introduction.padding.6b51d431df": {
+    "property": "padding",
+    "value": 12
+  },
+  "Introduction.padding.c2356069e9": {
+    "property": "padding",
+    "value": 24
+  },
+  "Introduction.paddingBottom.38d66d9692": {
+    "property": "paddingBottom",
+    "value": 130
+  },
+  "Introduction.maxWidth.a4c6af0cb6": {
+    "property": "maxWidth",
+    "value": 680
+  },
+  "Introduction.height.983bd614bb": {
+    "property": "height",
+    "value": 300
+  },
+  "Introduction.borderRadius.59e19706d5": {
+    "property": "borderRadius",
+    "value": 28
+  },
+  "Introduction.marginBottom.c2356069e9": {
+    "property": "marginBottom",
+    "value": 24
+  },
+  "Introduction.marginTop.4ec9599fc2": {
+    "property": "marginTop",
+    "value": 18
+  },
+  "Introduction.marginBottom.4ec9599fc2": {
+    "property": "marginBottom",
+    "value": 18
+  },
+  "Introduction.marginBottom.2c624232cd": {
+    "property": "marginBottom",
+    "value": 8
+  },
+  "Introduction.minWidth.80c3cd40fa": {
+    "property": "minWidth",
+    "value": 168
+  },
+  "Introduction.maxWidth.9644294ac4": {
+    "property": "maxWidth",
+    "value": 340
+  },
+  "PreferenceFields.marginVertical.6b51d431df": {
+    "property": "marginVertical",
+    "value": 12
+  },
+  "PreferenceFields.fontSize.f5ca38f748": {
+    "property": "fontSize",
+    "value": 20
+  },
+  "PreferenceFields.marginBottom.6b51d431df": {
+    "property": "marginBottom",
+    "value": 12
+  },
+  "PreferenceFields.gap.4a44dc1536": {
+    "property": "gap",
+    "value": 10
+  },
+  "ProductCard.marginBottom.c2356069e9": {
+    "property": "marginBottom",
+    "value": 24
+  },
+  "ProductCard.borderRadius.b17ef6d19c": {
+    "property": "borderRadius",
+    "value": 16
+  },
+  "ProductCard.aspectRatio.e2819fbe22": {
+    "property": "aspectRatio",
+    "value": 0.88
+  },
+  "ProductCard.padding.e629fa6598": {
+    "property": "padding",
+    "value": 15
+  },
+  "ProductCard.borderRadius.c2356069e9": {
+    "property": "borderRadius",
+    "value": 24
+  },
+  "ProductCard.paddingTop.6b51d431df": {
+    "property": "paddingTop",
+    "value": 12
+  },
+  "ProductCard.fontSize.19581e27de": {
+    "property": "fontSize",
+    "value": 9
+  },
+  "ProductCard.letterSpacing.1a948f1b43": {
+    "property": "letterSpacing",
+    "value": 1.4
+  },
+  "ProductCard.fontSize.9400f1b21c": {
+    "property": "fontSize",
+    "value": 19
+  },
+  "ProductCard.lineHeight.535fa30d7e": {
+    "property": "lineHeight",
+    "value": 23
+  },
+  "ProductCard.marginTop.7902699be4": {
+    "property": "marginTop",
+    "value": 7
+  },
+  "ProductCard.marginTop.19581e27de": {
+    "property": "marginTop",
+    "value": 9
+  },
+  "ProductCard.fontSize.3fdba35f04": {
+    "property": "fontSize",
+    "value": 13
+  },
+  "ScrollChrome.backgroundColor.09daa71dc2": {
+    "property": "backgroundColor",
+    "value": "rgba(255,252,248,0.82)"
+  },
+  "ScrollChrome.paddingHorizontal.e7f6c01177": {
+    "property": "paddingHorizontal",
+    "value": 6
+  },
+  "ScrollChrome.borderWidth.6b86b273ff": {
+    "property": "borderWidth",
+    "value": 1
+  },
+  "ScrollChrome.borderColor.28e2f381d3": {
+    "property": "borderColor",
+    "value": "rgba(255,255,255,0.8)"
+  },
+  "ScrollChrome.width.5feceb66ff": {
+    "property": "width",
+    "value": 0
+  },
+  "ScrollChrome.height.4b227777d4": {
+    "property": "height",
+    "value": 4
+  },
+  "ScrollChrome.shadowRadius.b17ef6d19c": {
+    "property": "shadowRadius",
+    "value": 16
+  },
+  "ScrollChrome.elevation.2c624232cd": {
+    "property": "elevation",
+    "value": 8
+  },
+  "ui.marginBottom.c2356069e9": {
+    "property": "marginBottom",
+    "value": 24
+  },
+  "ui.marginTop.4ec9599fc2": {
+    "property": "marginTop",
+    "value": 18
+  },
+  "ui.marginVertical.8527a891e2": {
+    "property": "marginVertical",
+    "value": 14
+  },
+  "ui.paddingHorizontal.6b51d431df": {
+    "property": "paddingHorizontal",
+    "value": 12
+  },
+  "ui.borderBottomWidth.6b86b273ff": {
+    "property": "borderBottomWidth",
+    "value": 1
+  },
+  "ui.marginTop.6b51d431df": {
+    "property": "marginTop",
+    "value": 12
+  },
+  "ui.paddingHorizontal.f5ca38f748": {
+    "property": "paddingHorizontal",
+    "value": 20
+  },
+  "ui.paddingVertical.8527a891e2": {
+    "property": "paddingVertical",
+    "value": 14
+  },
+  "ui.gap.4a44dc1536": {
+    "property": "gap",
+    "value": 10
+  },
+  "ui.fontSize.c2356069e9": {
+    "property": "fontSize",
+    "value": 24
+  },
+  "ui.fontSize.2c624232cd": {
+    "property": "fontSize",
+    "value": 8
+  },
+  "ui.letterSpacing.a97b042d7b": {
+    "property": "letterSpacing",
+    "value": 1.8
+  },
+  "ui.padding.785f3ec7eb": {
+    "property": "padding",
+    "value": 22
+  },
+  "ui.paddingBottom.d59eced1de": {
+    "property": "paddingBottom",
+    "value": 40
+  },
+  "ui.maxWidth.bdc5d8a48c": {
+    "property": "maxWidth",
+    "value": 900
+  },
+  "ui.fontSize.4a44dc1536": {
+    "property": "fontSize",
+    "value": 10
+  },
+  "ui.letterSpacing.b8736b9999": {
+    "property": "letterSpacing",
+    "value": 2.5
+  },
+  "ui.marginBottom.6b51d431df": {
+    "property": "marginBottom",
+    "value": 12
+  },
+  "ui.fontSize.aea92132c4": {
+    "property": "fontSize",
+    "value": 38
+  },
+  "ui.lineHeight.44cb730c42": {
+    "property": "lineHeight",
+    "value": 43
+  },
+  "ui.fontSize.8527a891e2": {
+    "property": "fontSize",
+    "value": 14
+  },
+  "ui.lineHeight.535fa30d7e": {
+    "property": "lineHeight",
+    "value": 23
+  },
+  "ui.fontSize.6b51d431df": {
+    "property": "fontSize",
+    "value": 12
+  },
+  "ui.lineHeight.9400f1b21c": {
+    "property": "lineHeight",
+    "value": 19
+  },
+  "ui.borderRadius.59e19706d5": {
+    "property": "borderRadius",
+    "value": 28
+  },
+  "ui.paddingHorizontal.535fa30d7e": {
+    "property": "paddingHorizontal",
+    "value": 23
+  },
+  "ui.minHeight.0e17daca5f": {
+    "property": "minHeight",
+    "value": 49
+  },
+  "ui.borderWidth.6b86b273ff": {
+    "property": "borderWidth",
+    "value": 1
+  },
+  "ui.fontSize.3fdba35f04": {
+    "property": "fontSize",
+    "value": 13
+  },
+  "ui.width.71ee45a3c0": {
+    "property": "width",
+    "value": 44
+  },
+  "ui.height.71ee45a3c0": {
+    "property": "height",
+    "value": 44
+  },
+  "ui.padding.b7a56873cd": {
+    "property": "padding",
+    "value": 25
+  },
+  "ui.paddingVertical.811786ad1a": {
+    "property": "paddingVertical",
+    "value": 45
+  },
+  "ui.borderRadius.b17ef6d19c": {
+    "property": "borderRadius",
+    "value": 16
+  },
+  "ui.padding.e629fa6598": {
+    "property": "padding",
+    "value": 15
+  },
+  "ui.minHeight.1a6562590e": {
+    "property": "minHeight",
+    "value": 50
+  },
+  "ui.fontSize.e629fa6598": {
+    "property": "fontSize",
+    "value": 15
+  },
+  "ui.lineHeight.6f4b661212": {
+    "property": "lineHeight",
+    "value": 21
+  },
+  "ui.marginVertical.6b51d431df": {
+    "property": "marginVertical",
+    "value": 12
+  },
+  "ui.borderRadius.f5ca38f748": {
+    "property": "borderRadius",
+    "value": 20
+  },
+  "ui.padding.f5ca38f748": {
+    "property": "padding",
+    "value": 20
+  },
+  "ui.marginBottom.b17ef6d19c": {
+    "property": "marginBottom",
+    "value": 16
+  },
+  "ui.borderRadius.c2356069e9": {
+    "property": "borderRadius",
+    "value": 24
+  },
+  "ui.paddingVertical.4fc82b26ae": {
+    "property": "paddingVertical",
+    "value": 11
+  },
+  "ui.paddingHorizontal.4523540f15": {
+    "property": "paddingHorizontal",
+    "value": 17
+  },
+  "ui.height.6b86b273ff": {
+    "property": "height",
+    "value": 1
+  },
+  "ui.marginVertical.785f3ec7eb": {
+    "property": "marginVertical",
+    "value": 22
+  }
+}

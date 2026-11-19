@@ -1,0 +1,11 @@
+# Vercel deployment
+
+Create your own Vercel project connected to your template repository. Choose apps/backend as the root directory and enable inclusion of files outside that directory for shared workspace configuration. Use Next.js as the framework and the committed workspace lockfile. The supplied app vercel.json sets npm install and npm run build. Verify the project build log resolves the monorepo root and shared packages. Local npm run build:backend verifies the same source, but does not prove project-specific Vercel settings.
+
+Set backend environment variables from apps/backend/.env.example in Vercel, including APP_URL, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, CEDARI_MCP_URL, CEDARI_API_KEY and OPENAI_API_KEY. APP_URL is the HTTPS backend origin used for signed email links. ALLOWED_ORIGINS is a comma-separated exact list of permitted web origins. Native requests without an Origin still require a valid customer JWT.
+
+Deploy, then configure the mobile EXPO_PUBLIC_API_URL to that HTTPS domain. Set matching Supabase public credentials. Run doctor using your environment. Verify tools/list against the configured Cedari deployment and test anonymous catalog/chat calls. Credentials are deliberately absent from this repository and no original production service is used as a fallback.
+
+The chat and image generation route has a 60-second application budget. Confirm your selected Vercel plan supports the route durations and request sizes you enable. Customer email cron currently permits maxDuration 300; confirm plan support before enabling it. Add a Vercel cron declaration only when email is enabled and CRON_SECRET exists. Daily schedule example is 0 15 * * * for /api/email/cron. Scheduling frequency, timing guarantees and duration limits depend on your plan. See the linked official documentation before enabling.
+
+Official references are https://vercel.com/docs/monorepos and https://vercel.com/docs/cron-jobs/usage-and-pricing. Validate settings for the current plan during deployment. No new Vercel project or paid resource has been created by this implementation.

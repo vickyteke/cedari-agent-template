@@ -1,3 +1,4 @@
+import {t} from "../../../../../packages/config/src/copy";
 import { createHash, randomUUID } from "node:crypto";
 import { CommerceError } from "./commerce";
 import { mcpConnection, usesCedari } from "./config";
@@ -32,9 +33,9 @@ export async function mcpRequest(method: string, params?: Record<string, unknown
   const { endpoint, credential } = mcpConnection();
   let url: URL;
   try { url = new URL(endpoint); }
-  catch { throw new Error("MCP endpoint is invalid"); }
-  if (url.username || url.password || url.hash || (url.protocol !== "https:" && !(url.protocol === "http:" && ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)))) throw new Error("MCP requires HTTPS outside localhost");
-  if (!credential || credential.length > 16000 || /\s/.test(credential) || (!usesCedari() && credential.length < 32)) throw new Error("MCP service credential is not configured correctly");
+  catch { throw new Error(t("backend.0fe186e926")); }
+  if (url.username || url.password || url.hash || (url.protocol !== "https:" && !(url.protocol === "http:" && ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)))) throw new Error(t("backend.092ebd76e0"));
+  if (!credential || credential.length > 16000 || /\s/.test(credential) || (!usesCedari() && credential.length < 32)) throw new Error(t("backend.51468a21df"));
   const key = cacheKey();
   let entry = metadata.get(key);
   if (!entry || entry.expires <= Date.now()) {
@@ -47,17 +48,17 @@ export async function mcpRequest(method: string, params?: Record<string, unknown
   async function send(method: string, params?: unknown, notification = false, requestSignal = signal) {
     const id = randomUUID();
     const response = await fetch(endpoint, { method: "POST", redirect: "error", signal: requestSignal,
-      headers: { Authorization: `Bearer ${credential}`, "Content-Type": "application/json", Accept: "application/json, text/event-stream", "MCP-Protocol-Version": protocol, ...(connection.session ? { "Mcp-Session-Id": connection.session } : {}) },
+      headers: { Authorization: t("dynamic.8523de2c94",{value0: String(credential)}), "Content-Type": "application/json", Accept: t("backend.cfb1f5add0"), "MCP-Protocol-Version": protocol, ...(connection.session ? { "Mcp-Session-Id": connection.session } : {}) },
       body: JSON.stringify({ jsonrpc: "2.0", ...(!notification ? { id } : {}), method, ...(params ? { params } : {}) }),
     });
     if (!response.ok) {
       void response.body?.cancel().catch(() => {});
       metadata.delete(key);
-      if (usesCedari()) throw new CommerceError(response.status === 429 ? "Please try again shortly." : "The shopping service is temporarily unavailable.", response.status === 429 ? 429 : 503, response.status === 429 ? "rate_limited" : "upstream_unavailable");
-      throw new Error(`Shopping MCP request failed (${response.status})`);
+      if (usesCedari()) throw new CommerceError(response.status === 429 ? t("backend.b154014c9f") : t("backend.98e995feb4"), response.status === 429 ? 429 : 503, response.status === 429 ? "rate_limited" : "upstream_unavailable");
+      throw new Error(t("dynamic.5ff593ab90",{value0: String(response.status)}));
     }
     connection.session = response.headers.get("mcp-session-id") || connection.session;
-    if (notification) { void response.body?.cancel().catch(() => {}); if (response.status !== 202) throw new Error("Invalid MCP notification response"); return; }
+    if (notification) { void response.body?.cancel().catch(() => {}); if (response.status !== 202) throw new Error(t("backend.36f0185957")); return; }
     try { return await readMcpResponse(response, id, requestSignal); }
     catch (error) { metadata.delete(key); throw error; }
   }
@@ -66,8 +67,8 @@ export async function mcpRequest(method: string, params?: Record<string, unknown
   // survives a turn. Shared discovery has its own timeout, not a shopper's signal.
   if (!connection.initialized) connection.initialized = (async () => {
     const discoverySignal = AbortSignal.timeout(10000);
-    const initialized = z.object({ protocolVersion: z.literal(protocol), capabilities: z.object({ tools: z.record(z.string(), z.unknown()) }) }).safeParse(await send("initialize", { protocolVersion: protocol, capabilities: {}, clientInfo: { name: "arviva-space-mobile-backend", version: "0.1.0" } }, false, discoverySignal));
-    if (!initialized.success) throw new Error("Incompatible Shopping MCP server");
+    const initialized = z.object({ protocolVersion: z.literal(protocol), capabilities: z.object({ tools: z.record(z.string(), z.unknown()) }) }).safeParse(await send("initialize", { protocolVersion: protocol, capabilities: {}, clientInfo: { name: "cedari-agent-template", version: "0.1.0" } }, false, discoverySignal));
+    if (!initialized.success) throw new Error(t("backend.2f6fd91e69"));
     await send("notifications/initialized", undefined, true, discoverySignal);
   })().catch(error => { metadata.delete(key); throw error; });
   await metadataForCaller(connection.initialized, signal);
@@ -89,26 +90,26 @@ export async function callUpstreamTool(name: string, args: Record<string, unknow
     const code = detail.success ? detail.data.code : "tool_failed";
     const status = result.structuredContent?.status;
     const known: Record<string, [number, string]> = {
-      not_found: [404, "This piece is no longer in the current catalog. Please search again."],
-      conflict: [409, "The selected pieces or checkout have changed. Please review your selection."],
-      invalid_request: [400, "The shopping request is invalid. Please review your selection."],
-      invalid_arguments: [400, "The shopping request is invalid. Please review your selection."],
-      buyer_context_required: [409, "Checkout needs your network address. Please retry from the app."],
-      out_of_stock: [409, "Some selected pieces are no longer available."],
-      insufficient_inventory: [409, "The requested quantity is unavailable."],
-      idempotency_conflict: [409, "This checkout attempt has different items. Please review your selection."],
-      rate_limited: [429, "Please try again shortly."],
-      allowance_exhausted: [429, "The shopping allowance has been reached. Please try again later."],
-      quota_exceeded: [429, "The shopping allowance has been reached. Please try again later."],
-      provider_checkout_not_found: [409, "This checkout session is no longer available. Please try again to prepare a fresh checkout."],
+      not_found: [404, t("backend.1b9d877632")],
+      conflict: [409, t("backend.e79f1c2d95")],
+      invalid_request: [400, t("backend.d86c694dcd")],
+      invalid_arguments: [400, t("backend.d86c694dcd")],
+      buyer_context_required: [409, t("backend.ec840fed47")],
+      out_of_stock: [409, t("backend.7439e7c630")],
+      insufficient_inventory: [409, t("backend.ac156d33bc")],
+      idempotency_conflict: [409, t("backend.61c9917666")],
+      rate_limited: [429, t("backend.b154014c9f")],
+      allowance_exhausted: [429, t("backend.75d73ebdb8")],
+      quota_exceeded: [429, t("backend.75d73ebdb8")],
+      provider_checkout_not_found: [409, t("backend.4980d4d567")],
     };
     if (usesCedari()) {
       const recognized = Object.hasOwn(known, code);
-      const safe: [number, string] = recognized ? known[code] : [503, "The shopping service could not complete this operation. Please try again."];
+      const safe: [number, string] = recognized ? known[code] : [503, t("backend.29c64369f8")];
       throw new CommerceError(safe[1], safe[0], recognized ? code : "upstream_error");
     }
-    throw new CommerceError(result.content?.find(c => c.type === "text")?.text || "Catalog tool failed", typeof status === "number" && [400, 404, 409, 429].includes(status) ? status : 503);
+    throw new CommerceError(result.content?.find(c => c.type === "text")?.text || t("backend.bcfe494201"), typeof status === "number" && [400, 404, 409, 429].includes(status) ? status : 503);
   }
-  if (!result?.structuredContent) throw new Error("Shopping MCP did not return structured data");
+  if (!result?.structuredContent) throw new Error(t("backend.e278f29bf2"));
   return result.structuredContent;
 }

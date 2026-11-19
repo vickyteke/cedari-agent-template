@@ -5,11 +5,11 @@ import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
 process.chdir(root);
 if(existsSync('.env.local'))process.loadEnvFile('.env.local');
-process.env.EXPO_PUBLIC_API_URL=process.env.ARVIVA_BUILD_API_URL||'https://www.arviva.space';
+process.env.EXPO_PUBLIC_API_URL=process.env.ARVIVA_BUILD_API_URL||process.env.EXPO_PUBLIC_API_URL || '';
 if(!process.env.EXPO_PUBLIC_API_URL.startsWith('https://'))throw Error('Standalone binaries require an HTTPS backend');
 for(const key of ['EXPO_PUBLIC_SUPABASE_URL','EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY'])if(!process.env[key])throw Error(`${key} must be configured`);
 process.env.NODE_ENV='production';
-process.env.DEVELOPER_DIR ||= '/Applications/Xcode.app/Contents/Developer';
+
 if(!process.env.JAVA_HOME && existsSync('/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home'))process.env.JAVA_HOME='/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home';
 process.env.ANDROID_HOME ||= existsSync('/opt/homebrew/share/android-commandlinetools')?'/opt/homebrew/share/android-commandlinetools':path.join(process.env.HOME,'Library/Android/sdk');
 if(process.env.JAVA_HOME)process.env.PATH=path.join(process.env.JAVA_HOME,'bin')+':'+process.env.PATH;

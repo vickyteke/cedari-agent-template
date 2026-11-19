@@ -1,3 +1,5 @@
+import { t } from "../../../../packages/config/src/copy.ts";
+import { agentConfig, storageNamespace } from "../../../../packages/config/src/public.ts";
 import { request } from './api';
 /* eslint-disable react-hooks/set-state-in-effect -- Account transitions must hide previous-account data while external storage is loading. */
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,16 +19,16 @@ type Context = {
   consent: boolean; setConsent: (value: boolean) => void; retrySync: () => void;
 };
 const Store = createContext<Context | null>(null);
-const keyFor = (id?: string) => `arviva.v1.${id || 'guest'}`;
+const keyFor = (id?: string) => `${storageNamespace(agentConfig.id)}.${id || 'guest'}`;
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState(emptyState); const [ready, setReady] = useState(false);
-  const [session, setSession] = useState<Session | null>(null); const [syncStatus, setSyncStatus] = useState('Saved on this device');
+  const [session, setSession] = useState<Session | null>(null); const [syncStatus, setSyncStatus] = useState(t("ui.ade5400f21"));
   const [activeChat, setActiveChat] = useState<string | null>(null); const [consent, setConsentState] = useState(false);
   const [retry, setRetry] = useState(0); const generation = useRef(0); const stateRef = useRef(state);
   const persisted = useRef(Promise.resolve());
   useEffect(() => { stateRef.current = state; }, [state]);
   useEffect(() => {
-    void AsyncStorage.getItem('arviva.analytics').then(value => { const allow = value === 'yes'; setConsentState(allow); analyticsConsent(allow); });
+    void AsyncStorage.getItem(storageNamespace(agentConfig.id) + '.analytics').then(value => { const allow = value === 'yes'; setConsentState(allow); analyticsConsent(allow); });
     let alive = true;
     if (!supabase) { setReady(true); return; }
     void supabase.auth.getSession().then(({ data }) => { if (alive) { setSession(data.session?.user.is_anonymous ? null : data.session); setReady(true); } });
@@ -51,7 +53,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           analytics?.identify(userId);
         }
         if (alive && generation.current === currentGeneration) { setState(next); setLoadedKey(key); }
-      } catch { if (alive) setSyncStatus('Saved data could not be loaded. Restart the app to retry.'); }
+      } catch { if (alive) setSyncStatus(t("ui.fcddb11d95")); }
     })();
     return () => { alive = false; };
   }, [userId, ready]);
@@ -59,7 +61,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (!loadedKey || loadedKey !== keyFor(userId)) return;
     const snapshot = state; const key = loadedKey;
     persisted.current = persisted.current.catch(() => {}).then(() => AsyncStorage.setItem(key, JSON.stringify(snapshot)));
-    void persisted.current.catch(() => setSyncStatus('Device storage is full. Changes may not be saved.'));
+    void persisted.current.catch(() => setSyncStatus(t("ui.26b57be15d")));
   }, [state, loadedKey, userId]);
   useEffect(() => {
     if (!loadedKey || !userId || !supabase || loadedKey !== keyFor(userId)) return;
@@ -78,25 +80,25 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           if (cancelled || generation.current !== currentGeneration) return;
           if (JSON.stringify(merged) !== JSON.stringify(stateRef.current)) setState(merged);
           await AsyncStorage.removeItem(keyFor());
-          setSyncStatus('Synced to your account'); return;
+          setSyncStatus(t("ui.3e53c083b9")); return;
         }
-        throw new Error('Concurrent update');
-      } catch { if (!cancelled) setSyncStatus('Saved on device · Sync pending. Tap to retry.'); }
+        throw new Error(t("ui.71be4f5816"));
+      } catch { if (!cancelled) setSyncStatus(t("ui.3fb8a0410c")); }
     })(); }, 900);
     return () => { cancelled = true; clearTimeout(timer); };
   }, [state, loadedKey, userId, retry]);
   function update(change: (state: ShopperState) => ShopperState) { setState(previous => change(previous)); }
   function save(product: Product) { const active = !state.saved[product.id]?.active; update(s => ({ ...s, saved: { ...s.saved, [product.id]: { product, active, updatedAt: Date.now() } } })); track(active ? 'product_saved' : 'product_unsaved', { product_id: product.id, merchant: product.store_key }); }
   function bag(product: Product, quantity: number) { update(s => ({ ...s, bag: { ...s.bag, [product.id]: { product, quantity: Math.max(0, Math.min(20, quantity)), updatedAt: Date.now() } } })); track(quantity === 0 ? 'bag_removed' : quantity > (stateRef.current.bag[product.id]?.quantity || 0) ? 'bag_added' : 'bag_quantity_changed', { product_id: product.id, merchant: product.store_key, quantity }); }
-  function newChat() { const id = Crypto.randomUUID(); update(s => ({ ...s, conversations: { ...s.conversations, [id]: { id, title: 'A new space', messages: [], updatedAt: Date.now() } } })); setActiveChat(id); return id; }
+  function newChat() { const id = Crypto.randomUUID(); update(s => ({ ...s, conversations: { ...s.conversations, [id]: { id, title: t("ui.240fd1a59b"), messages: [], updatedAt: Date.now() } } })); setActiveChat(id); return id; }
   async function signOut() {
     await persisted.current;
     const { error } = await supabase!.auth.signOut({ scope: 'local' });
     if (error) throw error;
-    await AsyncStorage.removeItem(keyFor()); analytics?.reset(); setState(emptyState()); setSyncStatus('Saved on this device');
+    await AsyncStorage.removeItem(keyFor()); analytics?.reset(); setState(emptyState()); setSyncStatus(t("ui.ade5400f21"));
   }
-  function clearHistory() { void request('/chat-images', { method: 'DELETE' }).catch(() => setSyncStatus('History cleared · Photo cleanup pending. Please try clearing history again.')); update(s => ({ ...s, viewed: {}, historyClearedAt: Date.now(), conversations: Object.fromEntries(Object.entries(s.conversations).map(([key, c]) => [key, { ...c, messages: [], deletedAt: Date.now(), updatedAt: Date.now() }])) })); setActiveChat(null); }
-  function setConsent(value: boolean) { setConsentState(value); analyticsConsent(value); void AsyncStorage.setItem('arviva.analytics', value ? 'yes' : 'no'); }
+  function clearHistory() { void request('/chat-images', { method: 'DELETE' }).catch(() => setSyncStatus(t("ui.5a1392ddcf"))); update(s => ({ ...s, viewed: {}, historyClearedAt: Date.now(), conversations: Object.fromEntries(Object.entries(s.conversations).map(([key, c]) => [key, { ...c, messages: [], deletedAt: Date.now(), updatedAt: Date.now() }])) })); setActiveChat(null); }
+  function setConsent(value: boolean) { setConsentState(value); analyticsConsent(value); void AsyncStorage.setItem(storageNamespace(agentConfig.id) + '.analytics', value ? 'yes' : 'no'); }
   return <Store.Provider value={{ state, ready: !!loadedKey && loadedKey === keyFor(userId), session, syncStatus, update, save, bag, activeChat, setActiveChat, newChat, signOut, clearHistory, consent, setConsent, retrySync: () => setRetry(x => x + 1) }}>{children}</Store.Provider>;
 }
-export function useShopper() { const value = useContext(Store); if (!value) throw new Error('Shopper provider missing'); return value; }
+export function useShopper() { const value = useContext(Store); if (!value) throw new Error(t("ui.68a690f199")); return value; }

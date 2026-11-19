@@ -1,3 +1,4 @@
+import { agentConfig } from "../../../packages/config/src/public";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import sharp from "sharp";
 import type { ChatInput } from "../src/lib/mobile/conversation";
@@ -28,6 +29,8 @@ const input: ChatInput = {
 const progress = { photoOwnerId: owner };
 
 beforeEach(() => {
+  agentConfig.features.roomPreviews = true;
+  agentConfig.agent.photoWorkflows = ["room-preview"];
   vi.clearAllMocks();
   vi.stubEnv("ROOM_PREVIEW_ENABLED", "true");
   vi.stubEnv("OPENAI_API_KEY", "test-key");
