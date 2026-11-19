@@ -15,7 +15,7 @@ Use Node 22.18 or later, npm and Supabase CLI 2.75.0 (the version pinned in CI).
 3. Run `npm run check:config` and `npm run setup:auth-templates` to validate configuration and generate branded sign-in emails.
 4. Run `supabase start`, `supabase db reset` and `supabase test db` against this local project. Follow docs/supabase.md for a hosted project.
 5. Copy `apps/backend/.env.example` to `apps/backend/.env.local` and `apps/mobile/.env.example` to `apps/mobile/.env.local`. Fill in your own credentials. The backend and mobile app must use the same Supabase project.
-6. Obtain a Cedari service credential and verify the available tools with your Cedari operator. Keep the credential only in the backend.
+6. Sign up at [cedari.ai](https://cedari.ai) and create your Cedari API key for MCP access. Set `CEDARI_API_KEY` in the backend environment and verify the available tools with `npm run doctor`. Keep the key only in the backend.
 7. Run `npm run dev:backend`. For local web testing, set the mobile API URL to `http://localhost:3000` and allow `http://localhost:8081` in backend ALLOWED_ORIGINS. Production requires HTTPS.
 8. Run `npm run dev:mobile` and select web, an iOS simulator or Android emulator. Device builds use the deployed HTTPS backend and embed public app configuration.
 

@@ -2,6 +2,8 @@
 
 Create your own Vercel project connected to your template repository. Choose apps/backend as the root directory and enable inclusion of files outside that directory for shared workspace configuration. Use Next.js as the framework and the committed workspace lockfile. The supplied app vercel.json sets npm install and npm run build. Verify the project build log resolves the monorepo root and shared packages. Local npm run build:backend verifies the same source, but does not prove project-specific Vercel settings.
 
+Sign up at [cedari.ai](https://cedari.ai) and create your Cedari API key before configuring MCP access.
+
 Set backend environment variables from apps/backend/.env.example in Vercel, including APP_URL, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, CEDARI_MCP_URL, CEDARI_API_KEY and OPENAI_API_KEY. APP_URL is the HTTPS backend origin used for signed email links. ALLOWED_ORIGINS is a comma-separated exact list of permitted web origins. Native requests without an Origin still require a valid customer JWT.
 
 Deploy, then configure the mobile EXPO_PUBLIC_API_URL to that HTTPS domain. Set matching Supabase public credentials. Run doctor using your environment. Verify tools/list against the configured Cedari deployment and test anonymous catalog/chat calls. Credentials are deliberately absent from this repository and no original production service is used as a fallback.
