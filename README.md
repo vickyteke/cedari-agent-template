@@ -8,7 +8,7 @@ An MIT-licensed starter with approved Arviva visual assets. Use GitHub’s “Us
 
 ## Start locally
 
-Use Node 22.18 or later, npm and the Supabase CLI. Docker Desktop is required for local Supabase. Install Xcode for local iOS builds or Android SDK/JDK 17 for local Android builds.
+Use Node 22.18 or later, npm and Supabase CLI 2.75.0 (the version pinned in CI). Docker Desktop is required for local Supabase. Install Xcode for local iOS builds or Android SDK/JDK 17 for local Android builds.
 
 1. Run `npm ci` at the repository root.
 2. Edit `config/agent.ts`. Start with `examples/single-merchant/config.ts` or `examples/multi-category/config.ts`. Fixture merchant/category IDs must be replaced with real Cedari values.

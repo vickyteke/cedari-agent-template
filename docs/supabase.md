@@ -1,5 +1,7 @@
 # Supabase provisioning
 
+Use Supabase CLI 2.75.0, matching CI and the generated config.toml. Newer CLI versions can introduce breaking configuration changes; upgrade the CLI and config together and rerun database checks.
+
 Use a dedicated Supabase project for each agent deployment. Do not reuse Arviva's customer database. The app and backend must point to the same project.
 
 After changing the brand, run npm run setup:auth-templates. For local development start Docker Desktop, then run supabase start, supabase db reset and supabase test db from the root, followed by node scripts/test-db-concurrency.mjs. These reset commands are only for this local project. The migrations provision customer state, private admission budgets/leases, private image storage and customer email jobs. No seller catalog or retired MCP OAuth tables are needed.
