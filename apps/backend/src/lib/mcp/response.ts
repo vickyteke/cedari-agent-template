@@ -1,27 +1,59 @@
-import {t} from "../../../../../packages/config/src/copy";
+import { t } from "../../../../../packages/config/src/copy";
 const maximumBytes = 4_000_000;
 
-function matchingResult(value: unknown, id: string): { result: unknown } | undefined {
-  if (!value || typeof value !== "object" || !("id" in value) || value.id !== id) return;
-  if (!("jsonrpc" in value) || value.jsonrpc !== "2.0" || "error" in value || !("result" in value)) throw new Error(t("backend.e121952551"));
+function matchingResult(
+  value: unknown,
+  id: string,
+): { result: unknown } | undefined {
+  if (
+    !value ||
+    typeof value !== "object" ||
+    !("id" in value) ||
+    value.id !== id
+  )
+    return;
+  if (
+    !("jsonrpc" in value) ||
+    value.jsonrpc !== "2.0" ||
+    "error" in value ||
+    !("result" in value)
+  )
+    throw new Error(t("backend.e121952551"));
   return { result: value.result };
 }
 function parse(text: string): unknown {
-  try { return JSON.parse(text); }
-  catch { throw new Error(t("backend.89ffdb63c4")); }
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(t("backend.89ffdb63c4"));
+  }
 }
 
-export async function readMcpResponse(response: Response, id: string, signal: AbortSignal): Promise<unknown> {
-  if (!response.body || Number(response.headers.get("content-length")) > maximumBytes) {
+export async function readMcpResponse(
+  response: Response,
+  id: string,
+  signal: AbortSignal,
+): Promise<unknown> {
+  if (
+    !response.body ||
+    Number(response.headers.get("content-length")) > maximumBytes
+  ) {
     void response.body?.cancel().catch(() => {});
     throw new Error(t("backend.bda8205ddb"));
   }
   const reader = response.body.getReader();
   const decoder = new TextDecoder("utf-8", { fatal: true });
-  const streaming = response.headers.get("content-type")?.includes("text/event-stream");
-  let text = "", bytes = 0;
+  const streaming = response.headers
+    .get("content-type")
+    ?.includes("text/event-stream");
+  let text = "",
+    bytes = 0;
   const event = (block: string) => {
-    const data = block.split("\n").filter(line => line.startsWith("data:")).map(line => line.slice(5).trimStart()).join("\n");
+    const data = block
+      .split("\n")
+      .filter((line) => line.startsWith("data:"))
+      .map((line) => line.slice(5).trimStart())
+      .join("\n");
     return data ? matchingResult(parse(data), id) : undefined;
   };
   try {
@@ -33,13 +65,18 @@ export async function readMcpResponse(response: Response, id: string, signal: Ab
         signal.addEventListener("abort", cancel, { once: true });
       });
       let chunk: ReadableStreamReadResult<Uint8Array>;
-      try { chunk = await Promise.race([reader.read(), aborted]); }
-      finally { signal.removeEventListener("abort", cancel); }
+      try {
+        chunk = await Promise.race([reader.read(), aborted]);
+      } finally {
+        signal.removeEventListener("abort", cancel);
+      }
       if (chunk.value) {
         bytes += chunk.value.byteLength;
         if (bytes > maximumBytes) throw new Error(t("backend.4868ca6761"));
       }
-      text += chunk.done ? decoder.decode() : decoder.decode(chunk.value, { stream: true });
+      text += chunk.done
+        ? decoder.decode()
+        : decoder.decode(chunk.value, { stream: true });
       if (streaming) {
         text = text.replace(/\r\n/g, "\n");
         let boundary: number;

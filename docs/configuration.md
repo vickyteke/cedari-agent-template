@@ -24,7 +24,7 @@ navigation.tabs defines the enabled built-in tabs in order, with labels and icon
 
 ## Onboarding
 
-onboarding has enabled, skippable, version, slides and fields. Each slide has a stable id, title, eyebrow, body, image key, field IDs and button label. Fields have stable IDs, type text/single/multiple, labels, options, required status, placeholders and length bounds. The special name and preferences IDs map to the existing basic profile. Other answers remain structured profile data and become bounded untrusted shopping context.
+onboarding has enabled, skippable, version, slides and fields. Each slide has a stable id, title, eyebrow, body, image key, field IDs and button label. Fields have stable IDs, type text/single/multiple, labels, options, required status, defaultValue, placeholders and length bounds. The special name and preferences IDs map to the existing basic profile. Other answers remain structured profile data and become bounded untrusted shopping context.
 
 Unknown answers survive configuration updates. Removed slide IDs resume at the first valid slide. Completed onboarding stays completed when a new field is added. Required fields are enforced during onboarding rather than retroactively deleting or blocking a completed profile. Profile editing exposes configured fields. Guest access always remains available.
 
@@ -39,3 +39,5 @@ Unknown answers survive configuration updates. Removed slide IDs resume at the f
 | Database schema | Apply reviewed migrations before dependent app/backend code |
 
 Keep the same config revision deployed across the app and backend. Server policy is authoritative when an older mobile build differs. Image/account cleanup remains accessible when uploads are disabled to support privacy requests.
+
+The root entry redirects to the configured initial tab. Chat has its own /chat route, so choosing Discover as the initial tab also works on later launches. Chat endpoints are disabled when the Chat tab is disabled. Privacy/account uses /account independently of the optional Profile tab.

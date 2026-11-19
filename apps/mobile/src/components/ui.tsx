@@ -1,28 +1,503 @@
 import { styleToken } from "../../../../packages/config/src/theme.ts";
 import { t } from "../../../../packages/config/src/copy.ts";
 import { agentConfig, theme } from "../../../../packages/config/src/public.ts";
-import { assets } from '../../../../config/assets';
-import { ScrollHeader, useScrollChrome } from './ScrollChrome';
-import { useCallback, type ReactNode } from 'react';
-import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View, Platform, type ViewStyle } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
-import { router, useFocusEffect } from 'expo-router';
-import { track } from '../lib/analytics';
+import { assets } from "../../../../config/assets";
+import { ScrollHeader, useScrollChrome } from "./ScrollChrome";
+import { useCallback, type ReactNode } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  type ViewStyle,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Svg, { Path } from "react-native-svg";
+import { router, useFocusEffect } from "expo-router";
+import { track } from "../lib/analytics";
 export const colors = theme.colors;
-export const serif = Platform.select({ ios: theme.fonts.heading, android: theme.fonts.heading === 'Georgia' ? 'serif' : theme.fonts.heading, default: theme.fonts.heading });
-export function Logo({ size = 38 }: { size?: number }) { return <Image source={assets.logo} accessibilityLabel={agentConfig.brand.name} style={{ width: size, height: size, borderRadius: size * 0.22 }} resizeMode="contain"/>; }
-const paths: Record<string, string> = { camera: 'M4 6h4l2-3h4l2 3h4v15H4V6Zm12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z', image: 'M3 3h18v18H3V3Zm0 13 6-6 5 5 3-3 4 4M17 7h.01', chat: 'M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5a9.5 9.5 0 0 1 19 0ZM7 9h9M7 13h6', discover: 'm12 2 9 9-9 11L3 11l9-9Zm0 0v20M3 11h18', heart: 'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z', bag: 'M5 7h14l2 15H3L5 7Zm3 0V5a4 4 0 0 1 8 0v2', user: 'M20 21v-2a7 7 0 0 0-14 0v2M17 7a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z', arrow: 'm5 12 14 0m-6-6 6 6-6 6', back: 'm15 5-7 7 7 7', close: 'm6 6 12 12M6 18 18 6', plus: 'M12 5v14M5 12h14', search: 'm21 21-6-6M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0', compare: 'M7 3v18M17 3v18M3 7h8M13 17h8', send: 'm4 12 16-8-8 16-2-6-6-2Zm6 2 10-10' };
-export function Icon({ name, color = colors.ink, size = 22, filled = false }: { name: string; color?: string; size?: number; filled?: boolean }) { return <Svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? color : 'none'} stroke={color} strokeWidth={theme.iconStrokeWidth} strokeLinecap="round" strokeLinejoin="round"><Path d={paths[name] || paths.discover}/></Svg>; }
-export function Button({ children, onPress, secondary, disabled, style }: { children: ReactNode; onPress: () => void; secondary?: boolean; disabled?: boolean; style?: ViewStyle }) { return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress} style={({ pressed }) => [s.button, secondary && s.secondary, { opacity: disabled ? 0.45 : pressed ? 0.7 : 1 }, style]}><Text style={[s.buttonText, secondary && { color: colors.ink }]}>{children}</Text></Pressable>; }
-export function IconButton({ name, label, onPress, filled, color }: { name: string; label: string; onPress: () => void; filled?: boolean; color?: string }) { return <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={s.iconButton}><Icon name={name} filled={filled} color={color}/></Pressable>; }
-export function Heading({ eyebrow, title, children }: { eyebrow?: string; title: string; children?: ReactNode }) { return <View style={{ marginBottom: styleToken("ui.marginBottom.c2356069e9","marginBottom",24) }}>{eyebrow && <Text style={s.eyebrow}>{eyebrow}</Text>}<Text style={s.title}>{title}</Text>{children}</View>; }
-export function Empty({ title, detail, action, onPress }: { title: string; detail: string; action?: string; onPress?: () => void }) { return <View style={s.empty}><Icon name="discover" size={38} color={colors.accent}/><Text style={[s.sectionTitle, { textAlign: 'center', marginTop: styleToken("ui.marginTop.4ec9599fc2","marginTop",18) }]}>{title}</Text><Text style={[s.body, { textAlign: 'center', marginVertical: styleToken("ui.marginVertical.8527a891e2","marginVertical",14) }]}>{detail}</Text>{action && onPress && <Button secondary onPress={onPress}>{action}</Button>}</View>; }
-export function Screen({ name, children, scroll = true }: { name: string; children: ReactNode; scroll?: boolean }) { const chrome = useScrollChrome(); const showChrome = chrome.show; const selectTab = chrome.selectTab; useFocusEffect(useCallback(() => { showChrome(); selectTab?.(name); track('screen_viewed', { screen: name }); }, [name, showChrome, selectTab])); return <SafeAreaView style={s.safe} edges={['top', 'left', 'right']}><ScrollHeader><View style={s.header}><View style={s.row}><Logo/><Text style={s.wordmark}>{agentConfig.brand.name}</Text></View><View style={s.row}>{agentConfig.brand.attribution && <Text style={s.company}>{agentConfig.brand.company}</Text>}<Pressable accessibilityRole="button" accessibilityLabel={t("ui.9f430bd5dd")} onPress={() => router.push('/account')}><Icon name="user"/></Pressable></View></View></ScrollHeader>{scroll ? <ScrollView keyboardShouldPersistTaps="handled" scrollEventThrottle={16} onScroll={chrome.onScroll} onScrollBeginDrag={chrome.onScrollBeginDrag} onScrollEndDrag={chrome.onScrollEndDrag} onMomentumScrollBegin={chrome.onMomentumScrollBegin} onMomentumScrollEnd={chrome.onMomentumScrollEnd} contentContainerStyle={[s.content, { paddingBottom: 40 + chrome.bottomSpace }]}>{children}</ScrollView> : <View style={{ flex: 1, paddingBottom: chrome.bottomSpace }}>{children}</View>}</SafeAreaView>; }
-export function Back({ title }: { title: string }) { return <View style={[s.row, { paddingHorizontal: styleToken("ui.paddingHorizontal.6b51d431df","paddingHorizontal",12), borderBottomWidth: styleToken("ui.borderBottomWidth.6b86b273ff","borderBottomWidth",1), borderColor: colors.line }]}><IconButton name="back" label={t("ui.6aadac2f2b")} onPress={() => router.canGoBack() ? router.back() : router.replace('/')}/><Text style={[s.sectionTitle, { flex: 1 }]}>{title}</Text></View>; }
-export function Loading() { return <View style={s.empty}><ActivityIndicator color={colors.accent}/><Text style={[s.body, { marginTop: styleToken("ui.marginTop.6b51d431df","marginTop",12) }]}>{t("ui.656399d091")}</Text></View>; }
+export const serif = Platform.select({
+  ios: theme.fonts.heading,
+  android: theme.fonts.heading === "Georgia" ? "serif" : theme.fonts.heading,
+  default: theme.fonts.heading,
+});
+export function Logo({ size = 38 }: { size?: number }) {
+  return (
+    <Image
+      source={assets.logo}
+      accessibilityLabel={agentConfig.brand.name}
+      style={{ width: size, height: size, borderRadius: size * 0.22 }}
+      resizeMode="contain"
+    />
+  );
+}
+const paths: Record<string, string> = {
+  camera: "M4 6h4l2-3h4l2 3h4v15H4V6Zm12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z",
+  image: "M3 3h18v18H3V3Zm0 13 6-6 5 5 3-3 4 4M17 7h.01",
+  chat: "M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5a9.5 9.5 0 0 1 19 0ZM7 9h9M7 13h6",
+  discover: "m12 2 9 9-9 11L3 11l9-9Zm0 0v20M3 11h18",
+  heart:
+    "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z",
+  bag: "M5 7h14l2 15H3L5 7Zm3 0V5a4 4 0 0 1 8 0v2",
+  user: "M20 21v-2a7 7 0 0 0-14 0v2M17 7a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z",
+  arrow: "m5 12 14 0m-6-6 6 6-6 6",
+  back: "m15 5-7 7 7 7",
+  close: "m6 6 12 12M6 18 18 6",
+  plus: "M12 5v14M5 12h14",
+  search: "m21 21-6-6M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0",
+  compare: "M7 3v18M17 3v18M3 7h8M13 17h8",
+  send: "m4 12 16-8-8 16-2-6-6-2Zm6 2 10-10",
+};
+export function Icon({
+  name,
+  color = colors.ink,
+  size = 22,
+  filled = false,
+}: {
+  name: string;
+  color?: string;
+  size?: number;
+  filled?: boolean;
+}) {
+  return (
+    <Svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill={filled ? color : "none"}
+      stroke={color}
+      strokeWidth={theme.iconStrokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <Path d={paths[name] || paths.discover} />
+    </Svg>
+  );
+}
+export function Button({
+  children,
+  onPress,
+  secondary,
+  disabled,
+  style,
+}: {
+  children: ReactNode;
+  onPress: () => void;
+  secondary?: boolean;
+  disabled?: boolean;
+  style?: ViewStyle;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        s.button,
+        secondary && s.secondary,
+        { opacity: disabled ? 0.45 : pressed ? 0.7 : 1 },
+        style,
+      ]}
+    >
+      <Text style={[s.buttonText, secondary && { color: colors.ink }]}>
+        {children}
+      </Text>
+    </Pressable>
+  );
+}
+export function IconButton({
+  name,
+  label,
+  onPress,
+  filled,
+  color,
+}: {
+  name: string;
+  label: string;
+  onPress: () => void;
+  filled?: boolean;
+  color?: string;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      style={s.iconButton}
+    >
+      <Icon name={name} filled={filled} color={color} />
+    </Pressable>
+  );
+}
+export function Heading({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow?: string;
+  title: string;
+  children?: ReactNode;
+}) {
+  return (
+    <View
+      style={{
+        marginBottom: styleToken(
+          "ui.marginBottom.c2356069e9",
+          "marginBottom",
+          24,
+        ),
+      }}
+    >
+      {eyebrow && <Text style={s.eyebrow}>{eyebrow}</Text>}
+      <Text style={s.title}>{title}</Text>
+      {children}
+    </View>
+  );
+}
+export function Empty({
+  title,
+  detail,
+  action,
+  onPress,
+}: {
+  title: string;
+  detail: string;
+  action?: string;
+  onPress?: () => void;
+}) {
+  return (
+    <View style={s.empty}>
+      <Icon name="discover" size={38} color={colors.accent} />
+      <Text
+        style={[
+          s.sectionTitle,
+          {
+            textAlign: "center",
+            marginTop: styleToken("ui.marginTop.4ec9599fc2", "marginTop", 18),
+          },
+        ]}
+      >
+        {title}
+      </Text>
+      <Text
+        style={[
+          s.body,
+          {
+            textAlign: "center",
+            marginVertical: styleToken(
+              "ui.marginVertical.8527a891e2",
+              "marginVertical",
+              14,
+            ),
+          },
+        ]}
+      >
+        {detail}
+      </Text>
+      {action && onPress && (
+        <Button secondary onPress={onPress}>
+          {action}
+        </Button>
+      )}
+    </View>
+  );
+}
+export function Screen({
+  name,
+  children,
+  scroll = true,
+}: {
+  name: string;
+  children: ReactNode;
+  scroll?: boolean;
+}) {
+  const chrome = useScrollChrome();
+  const showChrome = chrome.show;
+  const selectTab = chrome.selectTab;
+  useFocusEffect(
+    useCallback(() => {
+      showChrome();
+      selectTab?.(name);
+      track("screen_viewed", { screen: name });
+    }, [name, showChrome, selectTab]),
+  );
+  return (
+    <SafeAreaView style={s.safe} edges={["top", "left", "right"]}>
+      <ScrollHeader>
+        <View style={s.header}>
+          <View style={s.row}>
+            <Logo />
+            <Text style={s.wordmark}>{agentConfig.brand.name}</Text>
+          </View>
+          <View style={s.row}>
+            {agentConfig.brand.attribution && (
+              <Text style={s.company}>{agentConfig.brand.company}</Text>
+            )}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t("ui.9f430bd5dd")}
+              onPress={() => router.push("/account")}
+            >
+              <Icon name="user" />
+            </Pressable>
+          </View>
+        </View>
+      </ScrollHeader>
+      {scroll ? (
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          scrollEventThrottle={16}
+          onScroll={chrome.onScroll}
+          onScrollBeginDrag={chrome.onScrollBeginDrag}
+          onScrollEndDrag={chrome.onScrollEndDrag}
+          onMomentumScrollBegin={chrome.onMomentumScrollBegin}
+          onMomentumScrollEnd={chrome.onMomentumScrollEnd}
+          contentContainerStyle={[
+            s.content,
+            { paddingBottom: 40 + chrome.bottomSpace },
+          ]}
+        >
+          {children}
+        </ScrollView>
+      ) : (
+        <View style={{ flex: 1, paddingBottom: chrome.bottomSpace }}>
+          {children}
+        </View>
+      )}
+    </SafeAreaView>
+  );
+}
+export function Back({ title }: { title: string }) {
+  return (
+    <View
+      style={[
+        s.row,
+        {
+          paddingHorizontal: styleToken(
+            "ui.paddingHorizontal.6b51d431df",
+            "paddingHorizontal",
+            12,
+          ),
+          borderBottomWidth: styleToken(
+            "ui.borderBottomWidth.6b86b273ff",
+            "borderBottomWidth",
+            1,
+          ),
+          borderColor: colors.line,
+        },
+      ]}
+    >
+      <IconButton
+        name="back"
+        label={t("ui.6aadac2f2b")}
+        onPress={() =>
+          router.canGoBack() ? router.back() : router.replace("/")
+        }
+      />
+      <Text style={[s.sectionTitle, { flex: 1 }]}>{title}</Text>
+    </View>
+  );
+}
+export function Loading() {
+  return (
+    <View style={s.empty}>
+      <ActivityIndicator color={colors.accent} />
+      <Text
+        style={[
+          s.body,
+          { marginTop: styleToken("ui.marginTop.6b51d431df", "marginTop", 12) },
+        ]}
+      >
+        {t("ui.656399d091")}
+      </Text>
+    </View>
+  );
+}
 export const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.paper }, header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: styleToken("ui.paddingHorizontal.f5ca38f748","paddingHorizontal",20), paddingVertical: styleToken("ui.paddingVertical.8527a891e2","paddingVertical",14), borderBottomWidth: styleToken("ui.borderBottomWidth.6b86b273ff","borderBottomWidth",1), borderColor: colors.line },
-  row: { flexDirection: 'row', alignItems: 'center', gap: styleToken("ui.gap.4a44dc1536","gap",10) }, wordmark: { fontFamily: serif, fontSize: styleToken("ui.fontSize.c2356069e9","fontSize",24), letterSpacing: -0.8, color: colors.ink }, company: { fontSize: styleToken("ui.fontSize.2c624232cd","fontSize",8), letterSpacing: styleToken("ui.letterSpacing.a97b042d7b","letterSpacing",1.8), color: colors.muted }, content: { padding: styleToken("ui.padding.785f3ec7eb","padding",22), paddingBottom: styleToken("ui.paddingBottom.d59eced1de","paddingBottom",40), maxWidth: styleToken("ui.maxWidth.bdc5d8a48c","maxWidth",900), width: '100%', alignSelf: 'center' },
-  eyebrow: { color: colors.accent, fontSize: styleToken("ui.fontSize.4a44dc1536","fontSize",10), letterSpacing: styleToken("ui.letterSpacing.b8736b9999","letterSpacing",2.5), textTransform: 'uppercase', marginBottom: styleToken("ui.marginBottom.6b51d431df","marginBottom",12) }, title: { fontFamily: serif, fontSize: styleToken("ui.fontSize.aea92132c4","fontSize",38), lineHeight: styleToken("ui.lineHeight.44cb730c42","lineHeight",43), letterSpacing: -1, color: colors.ink }, sectionTitle: { fontFamily: serif, color: colors.ink, fontSize: styleToken("ui.fontSize.c2356069e9","fontSize",24) }, body: { fontFamily: theme.fonts.body, color: colors.muted, fontSize: styleToken("ui.fontSize.8527a891e2","fontSize",14), lineHeight: styleToken("ui.lineHeight.535fa30d7e","lineHeight",23) }, small: { color: colors.muted, fontSize: styleToken("ui.fontSize.6b51d431df","fontSize",12), lineHeight: styleToken("ui.lineHeight.9400f1b21c","lineHeight",19) }, button: { backgroundColor: colors.ink, borderRadius: theme.button.radius, paddingHorizontal: styleToken("ui.paddingHorizontal.535fa30d7e","paddingHorizontal",23), minHeight: theme.button.minHeight, justifyContent: 'center', alignItems: 'center' }, secondary: { backgroundColor: 'transparent', borderWidth: styleToken("ui.borderWidth.6b86b273ff","borderWidth",1), borderColor: colors.line }, buttonText: { fontFamily: theme.fonts.body, color: colors.white, fontSize: styleToken("ui.fontSize.3fdba35f04","fontSize",13), fontWeight: '600' }, iconButton: { width: styleToken("ui.width.71ee45a3c0","width",44), height: styleToken("ui.height.71ee45a3c0","height",44), alignItems: 'center', justifyContent: 'center' }, empty: { padding: styleToken("ui.padding.b7a56873cd","padding",25), paddingVertical: styleToken("ui.paddingVertical.811786ad1a","paddingVertical",45), alignItems: 'center' }, input: { borderWidth: styleToken("ui.borderWidth.6b86b273ff","borderWidth",1), borderColor: colors.line, backgroundColor: colors.white, borderRadius: styleToken("ui.borderRadius.b17ef6d19c","borderRadius",16), padding: styleToken("ui.padding.e629fa6598","padding",15), minHeight: styleToken("ui.minHeight.1a6562590e","minHeight",50), fontSize: styleToken("ui.fontSize.e629fa6598","fontSize",15), color: colors.ink }, error: { color: colors.error, fontSize: styleToken("ui.fontSize.3fdba35f04","fontSize",13), lineHeight: styleToken("ui.lineHeight.6f4b661212","lineHeight",21), marginVertical: styleToken("ui.marginVertical.6b51d431df","marginVertical",12) }, panel: { backgroundColor: colors.white, borderWidth: styleToken("ui.borderWidth.6b86b273ff","borderWidth",1), borderColor: colors.line, borderRadius: theme.card.radius, padding: styleToken("ui.padding.f5ca38f748","padding",20), marginBottom: styleToken("ui.marginBottom.b17ef6d19c","marginBottom",16) }, chip: { borderWidth: styleToken("ui.borderWidth.6b86b273ff","borderWidth",1), borderColor: colors.line, borderRadius: styleToken("ui.borderRadius.c2356069e9","borderRadius",24), paddingVertical: styleToken("ui.paddingVertical.4fc82b26ae","paddingVertical",11), paddingHorizontal: styleToken("ui.paddingHorizontal.4523540f15","paddingHorizontal",17), backgroundColor: colors.white }, chipText: { fontSize: styleToken("ui.fontSize.6b51d431df","fontSize",12), color: colors.ink }, divider: { height: styleToken("ui.height.6b86b273ff","height",1), backgroundColor: colors.line, marginVertical: styleToken("ui.marginVertical.785f3ec7eb","marginVertical",22) },
+  safe: { flex: 1, backgroundColor: colors.paper },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: styleToken(
+      "ui.paddingHorizontal.f5ca38f748",
+      "paddingHorizontal",
+      20,
+    ),
+    paddingVertical: styleToken(
+      "ui.paddingVertical.8527a891e2",
+      "paddingVertical",
+      14,
+    ),
+    borderBottomWidth: styleToken(
+      "ui.borderBottomWidth.6b86b273ff",
+      "borderBottomWidth",
+      1,
+    ),
+    borderColor: colors.line,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: styleToken("ui.gap.4a44dc1536", "gap", 10),
+  },
+  wordmark: {
+    fontFamily: serif,
+    fontSize: styleToken("ui.fontSize.c2356069e9", "fontSize", 24),
+    letterSpacing: -0.8,
+    color: colors.ink,
+  },
+  company: {
+    fontSize: styleToken("ui.fontSize.2c624232cd", "fontSize", 8),
+    letterSpacing: styleToken(
+      "ui.letterSpacing.a97b042d7b",
+      "letterSpacing",
+      1.8,
+    ),
+    color: colors.muted,
+  },
+  content: {
+    padding: styleToken("ui.padding.785f3ec7eb", "padding", 22),
+    paddingBottom: styleToken(
+      "ui.paddingBottom.d59eced1de",
+      "paddingBottom",
+      40,
+    ),
+    maxWidth: styleToken("ui.maxWidth.bdc5d8a48c", "maxWidth", 900),
+    width: "100%",
+    alignSelf: "center",
+  },
+  eyebrow: {
+    color: colors.accent,
+    fontSize: styleToken("ui.fontSize.4a44dc1536", "fontSize", 10),
+    letterSpacing: styleToken(
+      "ui.letterSpacing.b8736b9999",
+      "letterSpacing",
+      2.5,
+    ),
+    textTransform: "uppercase",
+    marginBottom: styleToken("ui.marginBottom.6b51d431df", "marginBottom", 12),
+  },
+  title: {
+    fontFamily: serif,
+    fontSize: styleToken("ui.fontSize.aea92132c4", "fontSize", 38),
+    lineHeight: styleToken("ui.lineHeight.44cb730c42", "lineHeight", 43),
+    letterSpacing: -1,
+    color: colors.ink,
+  },
+  sectionTitle: {
+    fontFamily: serif,
+    color: colors.ink,
+    fontSize: styleToken("ui.fontSize.c2356069e9", "fontSize", 24),
+  },
+  body: {
+    fontFamily: theme.fonts.body,
+    color: colors.muted,
+    fontSize: styleToken("ui.fontSize.8527a891e2", "fontSize", 14),
+    lineHeight: styleToken("ui.lineHeight.535fa30d7e", "lineHeight", 23),
+  },
+  small: {
+    color: colors.muted,
+    fontSize: styleToken("ui.fontSize.6b51d431df", "fontSize", 12),
+    lineHeight: styleToken("ui.lineHeight.9400f1b21c", "lineHeight", 19),
+  },
+  button: {
+    backgroundColor: colors.ink,
+    borderRadius: theme.button.radius,
+    paddingHorizontal: styleToken(
+      "ui.paddingHorizontal.535fa30d7e",
+      "paddingHorizontal",
+      23,
+    ),
+    minHeight: theme.button.minHeight,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  secondary: {
+    backgroundColor: "transparent",
+    borderWidth: styleToken("ui.borderWidth.6b86b273ff", "borderWidth", 1),
+    borderColor: colors.line,
+  },
+  buttonText: {
+    fontFamily: theme.fonts.body,
+    color: colors.white,
+    fontSize: styleToken("ui.fontSize.3fdba35f04", "fontSize", 13),
+    fontWeight: "600",
+  },
+  iconButton: {
+    width: styleToken("ui.width.71ee45a3c0", "width", 44),
+    height: styleToken("ui.height.71ee45a3c0", "height", 44),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  empty: {
+    padding: styleToken("ui.padding.b7a56873cd", "padding", 25),
+    paddingVertical: styleToken(
+      "ui.paddingVertical.811786ad1a",
+      "paddingVertical",
+      45,
+    ),
+    alignItems: "center",
+  },
+  input: {
+    borderWidth: styleToken("ui.borderWidth.6b86b273ff", "borderWidth", 1),
+    borderColor: colors.line,
+    backgroundColor: colors.white,
+    borderRadius: styleToken("ui.borderRadius.b17ef6d19c", "borderRadius", 16),
+    padding: styleToken("ui.padding.e629fa6598", "padding", 15),
+    minHeight: styleToken("ui.minHeight.1a6562590e", "minHeight", 50),
+    fontSize: styleToken("ui.fontSize.e629fa6598", "fontSize", 15),
+    color: colors.ink,
+  },
+  error: {
+    color: colors.error,
+    fontSize: styleToken("ui.fontSize.3fdba35f04", "fontSize", 13),
+    lineHeight: styleToken("ui.lineHeight.6f4b661212", "lineHeight", 21),
+    marginVertical: styleToken(
+      "ui.marginVertical.6b51d431df",
+      "marginVertical",
+      12,
+    ),
+  },
+  panel: {
+    backgroundColor: colors.white,
+    borderWidth: styleToken("ui.borderWidth.6b86b273ff", "borderWidth", 1),
+    borderColor: colors.line,
+    borderRadius: theme.card.radius,
+    padding: styleToken("ui.padding.f5ca38f748", "padding", 20),
+    marginBottom: styleToken("ui.marginBottom.b17ef6d19c", "marginBottom", 16),
+  },
+  chip: {
+    borderWidth: styleToken("ui.borderWidth.6b86b273ff", "borderWidth", 1),
+    borderColor: colors.line,
+    borderRadius: styleToken("ui.borderRadius.c2356069e9", "borderRadius", 24),
+    paddingVertical: styleToken(
+      "ui.paddingVertical.4fc82b26ae",
+      "paddingVertical",
+      11,
+    ),
+    paddingHorizontal: styleToken(
+      "ui.paddingHorizontal.4523540f15",
+      "paddingHorizontal",
+      17,
+    ),
+    backgroundColor: colors.white,
+  },
+  chipText: {
+    fontSize: styleToken("ui.fontSize.6b51d431df", "fontSize", 12),
+    color: colors.ink,
+  },
+  divider: {
+    height: styleToken("ui.height.6b86b273ff", "height", 1),
+    backgroundColor: colors.line,
+    marginVertical: styleToken(
+      "ui.marginVertical.785f3ec7eb",
+      "marginVertical",
+      22,
+    ),
+  },
 });

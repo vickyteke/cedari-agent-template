@@ -2,11 +2,11 @@
 gradle.beforeProject { app ->
   app.plugins.withId('com.android.application') {
    app.extensions.getByName('androidComponents').finalizeDsl { android ->
-    def signing = android.signingConfigs.create('arvivaUpload')
-    signing.storeFile = new File(System.getenv('ARVIVA_UPLOAD_STORE_FILE'))
-    signing.storePassword = System.getenv('ARVIVA_UPLOAD_PASSWORD')
-    signing.keyAlias = 'arviva-upload'
-    signing.keyPassword = System.getenv('ARVIVA_UPLOAD_PASSWORD')
+    def signing = android.signingConfigs.create('agentUpload')
+    signing.storeFile = new File(System.getenv('AGENT_UPLOAD_STORE_FILE'))
+    signing.storePassword = System.getenv('AGENT_UPLOAD_PASSWORD')
+    signing.keyAlias = 'agent-upload'
+    signing.keyPassword = System.getenv('AGENT_UPLOAD_PASSWORD')
     android.buildTypes.release.signingConfig = signing
    }
   }

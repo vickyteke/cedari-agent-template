@@ -7,22 +7,43 @@ export function createChatScrollFollow() {
   let momentum = false;
   let userGesture = false;
   let browsedEarlier = false;
-  const nearBottom = (offset: number, viewport: number, content: number) => content - viewport - offset <= 48;
+  const nearBottom = (offset: number, viewport: number, content: number) =>
+    content - viewport - offset <= 48;
   return {
     shouldFollow: () => following && !touching && !dragging && !momentum,
     paused: () => !following,
-    touchStart() { touching = true; following = false; dragging = false; momentum = false; userGesture = false; browsedEarlier = false; },
-    touchEnd() { touching = false; },
-    dragStart() { dragging = true; userGesture = true; following = false; },
-    dragEnd(offset: number, viewport: number, content: number) {
-      dragging = false; touching = false;
-      if (userGesture && !nearBottom(offset, viewport, content)) browsedEarlier = true;
-      if (userGesture && browsedEarlier) following = nearBottom(offset, viewport, content);
+    touchStart() {
+      touching = true;
+      following = false;
+      dragging = false;
+      momentum = false;
+      userGesture = false;
+      browsedEarlier = false;
     },
-    momentumStart() { if (userGesture) momentum = true; },
+    touchEnd() {
+      touching = false;
+    },
+    dragStart() {
+      dragging = true;
+      userGesture = true;
+      following = false;
+    },
+    dragEnd(offset: number, viewport: number, content: number) {
+      dragging = false;
+      touching = false;
+      if (userGesture && !nearBottom(offset, viewport, content))
+        browsedEarlier = true;
+      if (userGesture && browsedEarlier)
+        following = nearBottom(offset, viewport, content);
+    },
+    momentumStart() {
+      if (userGesture) momentum = true;
+    },
     momentumEnd(offset: number, viewport: number, content: number) {
-      if (userGesture && momentum && browsedEarlier) following = nearBottom(offset, viewport, content);
-      momentum = false; userGesture = false;
+      if (userGesture && momentum && browsedEarlier)
+        following = nearBottom(offset, viewport, content);
+      momentum = false;
+      userGesture = false;
     },
     scroll(offset: number, viewport: number, content: number) {
       if (dragging || momentum) {
@@ -30,6 +51,13 @@ export function createChatScrollFollow() {
         if (browsedEarlier) following = nearBottom(offset, viewport, content);
       }
     },
-    resume() { following = true; touching = false; dragging = false; momentum = false; userGesture = false; browsedEarlier = false; },
+    resume() {
+      following = true;
+      touching = false;
+      dragging = false;
+      momentum = false;
+      userGesture = false;
+      browsedEarlier = false;
+    },
   };
 }

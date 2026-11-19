@@ -1,9 +1,10 @@
-export const uiEnglish: Record<string,string> = {
+export const uiEnglish: Record<string, string> = {
   "ui.0a53bbbedb": "Invalid merchant checkout.",
   "ui.6b758b7cdf": "Could not open checkout.",
   "ui.59d5c3a26a": "Considered choices, ready for you",
   "ui.3f9c7ea9f5": "Your shopping bag.",
-  "ui.bc10deaaa9": "Each shop handles its own secure checkout, delivery and returns.",
+  "ui.bc10deaaa9":
+    "Each shop handles its own secure checkout, delivery and returns.",
   "ui.3dc1541e1a": "Default Title",
   "ui.afba2418d6": "−",
   "ui.a318c24216": "+",
@@ -26,18 +27,23 @@ export const uiEnglish: Record<string,string> = {
   "ui.9c216e69db": "A different direction to explore",
   "ui.cf00aa0104": "Try fewer keywords, another category, or a wider budget.",
   "ui.7179ea0035": "Clear filters",
-  "ui.41bdaa891c": "Prices and availability are confirmed by the merchant at checkout.",
+  "ui.41bdaa891c":
+    "Prices and availability are confirmed by the merchant at checkout.",
   "ui.b8a0df056f": "Layer my living room with texture",
   "ui.1371172a85": "Set a beautifully considered table",
   "ui.031eeb22cd": "Find sculptural bedroom lighting",
   "ui.21c3e0ada3": "Getting ready to help…",
   "ui.8d02052610": "Please choose that photo again.",
-  "ui.2119ea882e": "The simulator has no camera. Choose a photo from the library, or use the camera on a real phone.",
-  "ui.a86e1d312f": "Camera access is off. Enable it in your phone’s settings, or choose a photo from your library.",
-  "ui.90b848c5fb": "That photo could not be opened. Try exporting it as a JPEG or PNG and selecting it again.",
+  "ui.2119ea882e":
+    "The simulator has no camera. Choose a photo from the library, or use the camera on a real phone.",
+  "ui.a86e1d312f":
+    "Camera access is off. Enable it in your phone’s settings, or choose a photo from your library.",
+  "ui.90b848c5fb":
+    "That photo could not be opened. Try exporting it as a JPEG or PNG and selecting it again.",
   "ui.0b5c2afe10": "Getting your photos ready…",
   "ui.e17c5befb6": "Photo upload failed. Please try again.",
-  "ui.c4d1b28c66": "Suggest complementary pieces for the preferences or favorite pieces in my photos, from different shops.",
+  "ui.c4d1b28c66":
+    "Suggest complementary pieces for the preferences or favorite pieces in my photos, from different shops.",
   "ui.654aa58223": "Could not send your message.",
   "ui.efc80d5ff5": "Your conversations ↗",
   "ui.396c946f0c": "New conversation",
@@ -46,14 +52,17 @@ export const uiEnglish: Record<string,string> = {
   "ui.a137f17a19": "·",
   "ui.f5cccfb737": "messages",
   "ui.d63bfdfa16": "Your conversations sync to your account.",
-  "ui.0c8ae6b693": "Guest conversations stay on this device. Sign in to sync them.",
+  "ui.0c8ae6b693":
+    "Guest conversations stay on this device. Sign in to sync them.",
   "ui.8d18158460": "Your personal shopping companion",
   "ui.cd45dc4d9e": "Distinctive finds\nstart with a conversation.",
-  "ui.86756f7c54": "A more personal shopping experience, one conversation at a time. Tell me what you have in mind, and I’ll help you discover products that suit your preferences.",
+  "ui.86756f7c54":
+    "A more personal shopping experience, one conversation at a time. Tell me what you have in mind, and I’ll help you discover products that suit your preferences.",
   "ui.5feceb66ff": "0",
   "ui.e8703e7fb5": "CONSIDERED CHOICES. A PERSONAL POINT OF VIEW.",
   "ui.633b564713": "{agentName}",
-  "ui.81f7caa07e": "Show me more options like these, keeping the same preferences.",
+  "ui.81f7caa07e":
+    "Show me more options like these, keeping the same preferences.",
   "ui.6324c2015d": "Find more options",
   "ui.b23bf99fee": "Creating your room preview…",
   "ui.c70ac102b1": "Room preview in progress",
@@ -63,15 +72,18 @@ export const uiEnglish: Record<string,string> = {
   "ui.11a6767d56": "Done",
   "ui.7eb117190a": "Remove ×",
   "ui.366366057d": "Preparing your photo…",
-  "ui.bf8d8df923": "Your photos are shared with {agentName}’s AI when you send.",
+  "ui.bf8d8df923":
+    "Your photos are shared with {agentName}’s AI when you send.",
   "ui.cec6203b5d": "Add photos or take a picture",
   "ui.f9c2a6b745": "Message your shopping companion",
   "ui.5b656ad4d9": "Tell me what you’re looking for…",
   "ui.93a26b1eaf": "Send message",
-  "ui.98c9aea798": "Thoughtfully selected. Always your decision. · Privacy & preferences",
+  "ui.98c9aea798":
+    "Thoughtfully selected. Always your decision. · Privacy & preferences",
   "ui.f3abd8e92f": "Close photo options",
   "ui.65e015cddd": "Share a little inspiration",
-  "ui.14c1bb14e7": "Add up to two photos and tell me how you would like to use them.",
+  "ui.14c1bb14e7":
+    "Add up to two photos and tell me how you would like to use them.",
   "ui.303cd2c152": "Choose from photo library",
   "ui.996e6a73ea": "Take a photo",
   "ui.19766ed6cc": "Cancel",
@@ -83,11 +95,13 @@ export const uiEnglish: Record<string,string> = {
   "ui.0fee4c6e23": "Make yourself at home.",
   "ui.17775bb447": "You’re exploring as a guest",
   "ui.f15ac163b1": "Your favorites and conversations follow you.",
-  "ui.ddba8734f0": "Chat, browse and save freely. Sign in whenever you want to sync across devices.",
+  "ui.ddba8734f0":
+    "Chat, browse and save freely. Sign in whenever you want to sync across devices.",
   "ui.e6f13c85f1": "Sign in with email",
   "ui.8a1f90073b": "Revisit introduction",
   "ui.f4718a5b9d": "Your style & preferences",
-  "ui.5aaa821998": "Share your palette, preferred materials and the details that matter to you. Your companion will keep these in mind.",
+  "ui.5aaa821998":
+    "Share your palette, preferred materials and the details that matter to you. Your companion will keep these in mind.",
   "ui.be5edee540": "Preferred name",
   "ui.d82e5fe24e": "What should we call you?",
   "ui.da78fb91c8": "Shopping preferences",
@@ -96,19 +110,23 @@ export const uiEnglish: Record<string,string> = {
   "ui.089e57e38f": "Save preferences",
   "ui.ff5a743c8a": "Help improve {agentName}",
   "ui.d291d8a8c5": "Share anonymous usage analytics",
-  "ui.de9be6d155": "Share product interactions and app performance events. Analytics uses an internal ID and excludes your raw chats, email and payment information. Session recording is disabled.",
+  "ui.de9be6d155":
+    "Share product interactions and app performance events. Analytics uses an internal ID and excludes your raw chats, email and payment information. Session recording is disabled.",
   "ui.8e445e8aa6": "Recently viewed",
   "ui.ca29edb468": "↗",
   "ui.563d79dda0": "Pieces you explore will appear here.",
   "ui.92e9274edc": "Privacy & account",
-  "ui.4ad1a44243": "Conversations are sent to {agentName}’s shopping service to answer your requests. If AI is configured, recent messages, photos you attach, preferences, and a short summary of saved and viewed pieces are shared with its provider. Merchant checkout happens outside {agentName}.",
+  "ui.4ad1a44243":
+    "Conversations are sent to {agentName}’s shopping service to answer your requests. If AI is configured, recent messages, photos you attach, preferences, and a short summary of saved and viewed pieces are shared with its provider. Merchant checkout happens outside {agentName}.",
   "ui.acadf500fb": "Clear shopping history?",
-  "ui.f7b684dad2": "This clears conversations and recently viewed pieces. Favorites and your bag stay saved.",
+  "ui.f7b684dad2":
+    "This clears conversations and recently viewed pieces. Favorites and your bag stay saved.",
   "ui.1c2c4cc5c8": "Shopping history cleared.",
   "ui.bb18388c17": "Clear shopping history",
   "ui.48f0d3d397": "Sign out",
   "ui.e3b4e71126": "Delete your account?",
-  "ui.fecd33c836": "Your {agentName} account and synced shopping data will be permanently deleted. Merchant accounts and orders are managed separately.",
+  "ui.fecd33c836":
+    "Your {agentName} account and synced shopping data will be permanently deleted. Merchant accounts and orders are managed separately.",
   "ui.162730edd0": "Delete account & data",
   "ui.ba445cff38": "Privacy policy",
   "ui.e69e061448": "Terms of service",
@@ -121,12 +139,15 @@ export const uiEnglish: Record<string,string> = {
   "ui.2250a8a00c": "Select 2–4 pieces to compare.",
   "ui.e888155d8c": "Compare",
   "ui.b360ece9bc": "Your personal edit starts here",
-  "ui.63a804e445": "Save the pieces that speak to your style. Return to compare details and see how your ideas come together.",
+  "ui.63a804e445":
+    "Save the pieces that speak to your style. Return to compare details and see how your ideas come together.",
   "ui.41bd09a912": "Explore the collection",
   "ui.e618b8c7ec": "Let’s try that again",
-  "ui.606db817ee": "This screen couldn’t load. Your saved pieces are still on your device.",
+  "ui.606db817ee":
+    "This screen couldn’t load. Your saved pieces are still on your device.",
   "ui.a3d7b387c3": "Side by side",
-  "ui.be4443a945": "Some saved pieces are no longer in the current catalog. Find them again to compare or check out.",
+  "ui.be4443a945":
+    "Some saved pieces are no longer in the current catalog. Find them again to compare or check out.",
   "ui.d68fe5e505": "Product",
   "ui.ef6691545d": "Standard",
   "ui.6c8b70aefd": "Available when checked",
@@ -136,38 +157,46 @@ export const uiEnglish: Record<string,string> = {
   "ui.e7a1fd07ad": "A closer look",
   "ui.ce9c3547bf": "Toggle saved product",
   "ui.d78933e0cf": "Variant:",
-  "ui.edfa011747": "Explore this piece on the merchant’s website for the full details.",
+  "ui.edfa011747":
+    "Explore this piece on the merchant’s website for the full details.",
   "ui.3848efcfec": "Currently unavailable",
   "ui.250c100833": "Added to your bag ✓",
   "ui.7a425d7289": "Could not open the merchant website.",
   "ui.66d0d4375f": "View at",
   "ui.0dddd3deba": "Sold and fulfilled by",
-  "ui.77bb0c51a8": ". You’ll complete checkout on their website. Prices, availability, delivery and returns are confirmed by the shop.",
-  "ui.f35d89772a": "Email sign-in is not connected yet. You can keep shopping as a guest.",
+  "ui.77bb0c51a8":
+    ". You’ll complete checkout on their website. Prices, availability, delivery and returns are confirmed by the shop.",
+  "ui.f35d89772a":
+    "Email sign-in is not connected yet. You can keep shopping as a guest.",
   "ui.97dd307bf2": "Could not sign in.",
   "ui.f80e3131b4": "Your {agentName} account",
   "ui.b59da14787": "A style, distinctly yours",
   "ui.7dd2cd443f": "Your personal edit, wherever you are.",
-  "ui.8c98ecdc1d": "Sign up or sign in with an email code—no password needed. Save conversations, sync favorites, and keep your shopping preferences in one place. Your guest favorites and conversations will join your account.",
+  "ui.8c98ecdc1d":
+    "Sign up or sign in with an email code—no password needed. Save conversations, sync favorites, and keep your shopping preferences in one place. Your guest favorites and conversations will join your account.",
   "ui.f2488fd4ef": "Email address",
   "ui.53e6cdc307": "you@example.com",
   "ui.3892dc9387": "Enter the code sent to",
   "ui.fb746eea08": ". Check your spam folder too.",
   "ui.be420e2629": "Email verification code",
   "ui.3ee75029c7": "Verification code",
-  "ui.2d03266365": "Email me a welcome guide and weekly personal edits, optional",
-  "ui.3a6d8b9674": "Email me a welcome guide and weekly personal edits. Optional; unsubscribe anytime. This is separate from analytics consent.",
+  "ui.2d03266365":
+    "Email me a welcome guide and weekly personal edits, optional",
+  "ui.3a6d8b9674":
+    "Email me a welcome guide and weekly personal edits. Optional; unsubscribe anytime. This is separate from analytics consent.",
   "ui.7ce83d4536": "One moment…",
   "ui.63e2e398aa": "Verify & sign in",
   "ui.d6687d2b32": "Email me a sign-in code",
   "ui.5dfc237e62": "Change email or request another code",
   "ui.511b700644": "Continue as a guest",
-  "ui.ef6d1611b5": "By continuing, you agree to {brandName}’s terms and privacy policy, available under You.",
+  "ui.ef6d1611b5":
+    "By continuing, you agree to {brandName}’s terms and privacy policy, available under You.",
   "ui.b344f01b89": "Could not prepare a secure merchant checkout.",
   "ui.85c0c5b9c5": "Could not open checkout. Please try again.",
   "ui.7c6640bda0": "Your selection",
   "ui.ff2ae18c17": "Preparing your checkout…",
-  "ui.54e365b873": "Review your items, shipping and payment on the shop’s website. Checkout preparation does not submit payment.",
+  "ui.54e365b873":
+    "Review your items, shipping and payment on the shop’s website. Checkout preparation does not submit payment.",
   "ui.b53ea25115": "Your piece",
   "ui.d4b2cb9601": "Quantity:",
   "ui.bec1687971": "each",
@@ -190,22 +219,30 @@ export const uiEnglish: Record<string,string> = {
   "ui.e4a4223ae4": "Preparing your email…",
   "ui.09ac4a79ca": "Email my edit",
   "ui.71776c5dd3": "Sign in to email my edit",
-  "ui.7ca984ec67": "Email preferences could not be loaded. Please try again later.",
+  "ui.7ca984ec67":
+    "Email preferences could not be loaded. Please try again later.",
   "ui.204838a2ff": "Your inbox, thoughtfully curated",
-  "ui.db6a06a882": "After you sign in, you can choose a welcome guide and weekly personal edits. Shopping as a guest never subscribes you to emails.",
+  "ui.db6a06a882":
+    "After you sign in, you can choose a welcome guide and weekly personal edits. Shopping as a guest never subscribes you to emails.",
   "ui.1e2fd1e5be": "Email preferences saved.",
   "ui.2f05ee1389": "Preferences could not be saved.",
-  "ui.1c6cbbf06f": "Choose what you hear from {agentName}. These choices are separate from analytics. Welcome and weekly emails are limited to one per week; edits you request are sent separately.",
-  "ui.3c8d2523c1": "Your sign-in succeeded, but your email choices could not be saved. Please choose them below.",
+  "ui.1c6cbbf06f":
+    "Choose what you hear from {agentName}. These choices are separate from analytics. Welcome and weekly emails are limited to one per week; edits you request are sent separately.",
+  "ui.3c8d2523c1":
+    "Your sign-in succeeded, but your email choices could not be saved. Please choose them below.",
   "ui.c961ce2ecb": "A welcome guide, once",
   "ui.4f201519fe": "Email me a welcome guide once",
   "ui.28ed27c320": "Weekly personal edits",
   "ui.229a7d9e78": "Email me weekly personal edits",
-  "ui.e3a50dea8f": "Up to five pieces inspired by your preferences and shopping activity. We’ll skip an edit when there aren’t enough fresh matches. Email links let you return to {agentName}; chat text and room photos are never included.",
-  "ui.2f3f134ce3": "Email delivery is being connected. You can save your choices now.",
-  "ui.28fec8de6f": "Email delivery to this account is paused after a delivery problem or opt-out reported to our email provider. Contact {supportEmail} for help.",
+  "ui.e3a50dea8f":
+    "Up to five pieces inspired by your preferences and shopping activity. We’ll skip an edit when there aren’t enough fresh matches. Email links let you return to {agentName}; chat text and room photos are never included.",
+  "ui.2f3f134ce3":
+    "Email delivery is being connected. You can save your choices now.",
+  "ui.28fec8de6f":
+    "Email delivery to this account is paused after a delivery problem or opt-out reported to our email provider. Contact {supportEmail} for help.",
   "ui.57a059d2b6": "Save email preferences",
-  "ui.dbc022e46a": "Your introduction could not be saved. Please check device storage.",
+  "ui.dbc022e46a":
+    "Your introduction could not be saved. Please check device storage.",
   "ui.83f153b9bc": "Please check: ",
   "ui.76900f1bfd": "Back",
   "ui.28d03596d2": "Skip",
@@ -223,6 +260,7 @@ export const uiEnglish: Record<string,string> = {
   "ui.71be4f5816": "Concurrent update",
   "ui.3fb8a0410c": "Saved on device · Sync pending. Tap to retry.",
   "ui.240fd1a59b": "A new space",
-  "ui.5a1392ddcf": "History cleared · Photo cleanup pending. Please try clearing history again.",
-  "ui.68a690f199": "Shopper provider missing"
+  "ui.5a1392ddcf":
+    "History cleared · Photo cleanup pending. Please try clearing history again.",
+  "ui.68a690f199": "Shopper provider missing",
 };

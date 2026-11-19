@@ -9,7 +9,7 @@
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present && node --test scripts/tests/*.test.mjs",
     "build:backend": "npm run build --workspace apps/backend",
     "export:web": "npm run export:web --workspace apps/mobile",
     "check:config": "node --experimental-strip-types scripts/check-config.mjs",
@@ -18,7 +18,8 @@
     "dev:mobile": "npm run start --workspace apps/mobile",
     "dev:backend": "npm run dev --workspace apps/backend",
     "build:ios": "npm run build:ios --workspace apps/mobile",
-    "build:android:play": "npm run build:android:play --workspace apps/mobile"
+    "build:android:play": "npm run build:android:play --workspace apps/mobile",
+    "setup:auth-templates": "node --experimental-strip-types scripts/configure-auth.mjs"
   },
   "devDependencies": {
     "expo": "~58.0.17",

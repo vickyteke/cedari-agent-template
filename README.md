@@ -10,7 +10,7 @@ Use Node 22.18 or later, npm and the Supabase CLI. Docker Desktop is required fo
 
 1. Run `npm ci` at the repository root.
 2. Edit `config/agent.ts`. Start with `examples/single-merchant/config.ts` or `examples/multi-category/config.ts`. Fixture merchant/category IDs must be replaced with real Cedari values.
-3. Run `npm run check:config`.
+3. Run `npm run check:config` and `npm run setup:auth-templates` to validate configuration and generate branded sign-in emails.
 4. Run `supabase start`, `supabase db reset` and `supabase test db` against this local project. Follow docs/supabase.md for a hosted project.
 5. Copy `apps/backend/.env.example` to `apps/backend/.env.local` and `apps/mobile/.env.example` to `apps/mobile/.env.local`. Fill in your own credentials. The backend and mobile app must use the same Supabase project.
 6. Obtain a Cedari service credential and verify the available tools with your Cedari operator. Keep the credential only in the backend.
@@ -46,3 +46,5 @@ Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build:backend`, `n
 - examples contains independent brand and assortment presets.
 
 Each deployer pays their own hosting, AI, email and applicable Cedari service costs. Cedari's service availability and terms are separate from the template code license.
+
+Run npm run setup:auth-templates after choosing the brand. Local Supabase uses the generated template for both confirmation and magic-link OTP emails. For a hosted project, copy that template into both corresponding Authentication email-template settings.

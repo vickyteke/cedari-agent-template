@@ -10,3 +10,9 @@ test('hidden_tab_direct_route_is_inaccessible',()=>{
 test('disabled_comparison_route_is_inaccessible',()=>{
  assert.equal(routeAvailable('/compare',{...defaultConfig,features:{...defaultConfig.features,comparison:false}}),false);
 });
+
+test('initial_route_is_distinct_from_the_chat_route',async()=>{
+ const {tabHref}=await import('../src/lib/navigation.ts');
+ assert.equal(tabHref('chat'),'/chat');
+ assert.equal(tabHref('discover'),'/discover');
+});
